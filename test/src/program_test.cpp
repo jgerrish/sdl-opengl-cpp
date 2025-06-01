@@ -136,10 +136,10 @@ TEST_CASE("testing that the Program constructor works with exceptions") {
 
   // Expect a successful compile (parameter three, success, is set
   // to 1)
-  EXPECT_EQ(success, 1);
+  CHECK_EQ(success, 1);
 
   // Test that the actual VertexBufferObject object was also updated
-  EXPECT_EQ(program_tester.program_handle(), 1);
+  CHECK_EQ(program_tester.program_handle(), 1);
 }
 
 #else
@@ -216,10 +216,10 @@ TEST_CASE(
 
   // Expect a successful compile (parameter three, success, is set
   // to 1)
-  EXPECT_EQ(success, 1);
+  CHECK_EQ(success, 1);
 
   // Test that the actual VertexBufferObject object was also updated
-  EXPECT_EQ(program_tester.program_handle(), 1);
+  CHECK_EQ(program_tester.program_handle(), 1);
 }
 
 #endif
@@ -303,11 +303,11 @@ TEST_CASE("testing that the Program constructor works with two shaders and "
 
   // Expect a successful compile (parameter three, success, is set
   // to 1)
-  EXPECT_EQ(s1_success, 1);
-  EXPECT_EQ(s2_success, 1);
+  CHECK_EQ(s1_success, 1);
+  CHECK_EQ(s2_success, 1);
 
   // Test that the actual VertexBufferObject object was also updated
-  EXPECT_EQ(program_tester.program_handle(), 1);
+  CHECK_EQ(program_tester.program_handle(), 1);
 }
 
 #else
@@ -389,11 +389,11 @@ TEST_CASE("testing that the Program constructor works with two shaders and "
 
   // Expect a successful compile (parameter three, success, is set
   // to 1)
-  EXPECT_EQ(s1_success, 1);
-  EXPECT_EQ(s2_success, 1);
+  CHECK_EQ(s1_success, 1);
+  CHECK_EQ(s2_success, 1);
 
   // Test that the actual VertexBufferObject object was also updated
-  EXPECT_EQ(program_tester.program_handle(), 1);
+  CHECK_EQ(program_tester.program_handle(), 1);
 }
 
 #endif

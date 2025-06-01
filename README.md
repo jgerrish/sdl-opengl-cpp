@@ -37,11 +37,11 @@ $ mkdir build
 
 For debug builds:
 
-$ cmake -DCMAKE_BUILD_TYPE=Debug ..
+$ cmake -DCMAKE\_BUILD\_TYPE=Debug ..
 
 For release builds:
 
-$ cmake -DCMAKE_BUILD_TYPE=Debug ..
+$ cmake -DCMAKE\_BUILD\_TYPE=Debug ..
 
 To build it:
 

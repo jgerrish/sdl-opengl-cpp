@@ -70,10 +70,10 @@ TEST_CASE("testing that the Shader constructor works with exceptions") {
 
   // Expect a successful compile (parameter three, success, is set
   // to 1)
-  EXPECT_EQ(success, 1);
+  CHECK_EQ(success, 1);
 
   // Test that the actual VertexBufferObject object was also updated
-  EXPECT_EQ(shader_tester.shader_handle(), 1);
+  CHECK_EQ(shader_tester.shader_handle(), 1);
 }
 
 #else
@@ -110,10 +110,10 @@ TEST_CASE(
 
   // Expect a successful compile (parameter three, success, is set
   // to 1)
-  EXPECT_EQ(success, 1);
+  CHECK_EQ(success, 1);
 
   // Test that the actual VertexBufferObject object was also updated
-  EXPECT_EQ(shader_tester.shader_handle(), 1);
+  CHECK_EQ(shader_tester.shader_handle(), 1);
 }
 
 #endif
@@ -161,14 +161,14 @@ TEST_CASE("testing that the Shader constructor sets ShaderCreationError error "
 
   if (shader_tester.shader) {
     CHECK(!shader_tester.shader->valid());
-    EXPECT_EQ(shader_tester.shader->get_last_error(),
+    CHECK_EQ(shader_tester.shader->get_last_error(),
               shader::error::ShaderCreationError);
   } else {
     CHECK(false);
   }
 
   // Test that the actual shader handle was not updated
-  EXPECT_EQ(shader_tester.shader_handle(), 0);
+  CHECK_EQ(shader_tester.shader_handle(), 0);
 }
 
 #endif
@@ -290,7 +290,7 @@ TEST_CASE("testing that the Shader sets ShaderCompilationError code with "
   }
 
   // Test that the actual VertexBufferObject object was reset during cleanup
-  EXPECT_EQ(shader_tester.shader_handle(), 0);
+  CHECK_EQ(shader_tester.shader_handle(), 0);
 }
 
 #endif

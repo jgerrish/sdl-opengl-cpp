@@ -178,7 +178,7 @@ TEST_CASE("testing that VertexArrayObject constructor sets error flag") {
   } else {
     CHECK(false);
   }
-  EXPECT_EQ(array1, 0);
+  CHECK_EQ(array1, 0);
 }
 
 #endif
@@ -245,7 +245,7 @@ TEST_CASE("testing that VertexArrayObject constructor works with exceptions") {
   EXPECT_CALL(*mock_opengl_context, glDeleteBuffers(1, _)).Times(1);
 
   VertexArrayObjectTester vao_tester(mock_opengl_context);
-  EXPECT_EQ(array1, 1);
+  CHECK_EQ(array1, 1);
 }
 
 #else
@@ -315,7 +315,7 @@ TEST_CASE("testing that VertexBufferObject constructor works with exceptions "
   } else {
     CHECK(false);
   }
-  EXPECT_EQ(array1, 1);
+  CHECK_EQ(array1, 1);
 }
 
 #endif

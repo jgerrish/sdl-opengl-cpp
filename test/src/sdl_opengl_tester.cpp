@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
     return res;
   }
 
-  return -1;
+  return res;
 }
 
 using namespace sdl_opengl_cpp;

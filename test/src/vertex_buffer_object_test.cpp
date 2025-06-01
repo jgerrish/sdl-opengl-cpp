@@ -117,7 +117,7 @@ TEST_SUITE("sdl_opengl_cpp_vertex_buffer_object") {
         }(),
         "ERROR::VERTEX_BUFFER::GEN_BUFFERS_FAILED", GenBuffersError);
 
-    EXPECT_EQ(buffer, 0);
+    CHECK_EQ(buffer, 0);
   }
 #else
   TEST_CASE("testing that VertexBufferObject constructor sets error flag") {
@@ -164,7 +164,7 @@ TEST_SUITE("sdl_opengl_cpp_vertex_buffer_object") {
     } else {
       CHECK(false);
     }
-    EXPECT_EQ(buffer, 0);
+    CHECK_EQ(buffer, 0);
   }
 #endif
 
@@ -223,10 +223,10 @@ TEST_SUITE("sdl_opengl_cpp_vertex_buffer_object") {
 
     VertexBufferObjectTester vbo_tester(mock_opengl_context);
 
-    EXPECT_EQ(buffer, 1);
+    CHECK_EQ(buffer, 1);
 
     // Test that the actual VertexBufferObject object was also updated
-    EXPECT_EQ(vbo_tester.VBO(), 1);
+    CHECK_EQ(vbo_tester.VBO(), 1);
   }
 
 #else
@@ -286,10 +286,10 @@ TEST_SUITE("sdl_opengl_cpp_vertex_buffer_object") {
 
     VertexBufferObjectTester vbo_tester(mock_opengl_context);
 
-    EXPECT_EQ(buffer, 1);
+    CHECK_EQ(buffer, 1);
 
     // Test that the actual VertexBufferObject object was also updated
-    EXPECT_EQ(vbo_tester.VBO(), 1);
+    CHECK_EQ(vbo_tester.VBO(), 1);
 
     if (vbo_tester.vbo) {
       CHECK(vbo_tester.vbo->valid());
@@ -450,7 +450,7 @@ TEST_SUITE("sdl_opengl_cpp_vertex_buffer_object") {
     vbo_tester.set_invalid_VBO();
 
     // Test that the actual VertexBufferObject object was updated
-    EXPECT_EQ(vbo_tester.VBO(), 0);
+    CHECK_EQ(vbo_tester.VBO(), 0);
 
     // Test the bind() method
     (*vbo_tester.vbo).bind();
@@ -547,7 +547,7 @@ TEST_SUITE("sdl_opengl_cpp_vertex_buffer_object") {
     vbo_tester.set_invalid_VBO();
 
     // Test that the actual VertexBufferObject object was updated
-    EXPECT_EQ(vbo_tester.VBO(), 0);
+    CHECK_EQ(vbo_tester.VBO(), 0);
 
     // Test the bind() method
     (*vbo_tester.vbo).bind();
