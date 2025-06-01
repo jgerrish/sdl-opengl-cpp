@@ -1,0 +1,11 @@
+# object files
+*.o
+
+# common CMake build directory
+build
+
+# Cache files for things like clangd
+.cache
+
+# Emacs backup files
+*~
