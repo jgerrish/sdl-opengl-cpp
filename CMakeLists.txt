@@ -49,12 +49,7 @@ if(USE_GCC OR USE_CLANG OR USE_INTELCC OR USE_QCC)
 endif()
 
 # A lot of this is duplicated in scripts/cmake/common.cmake
-if(MSVC)
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W4")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /UTF-8")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /UTF-8")
-elseif(USE_GCC OR USE_CLANG OR USE_INTELCC)
+if(USE_GCC OR USE_CLANG OR USE_INTELCC)
   include(CheckCompilerFlag)
   if(HAVE_WERROR)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Werror -Wall -Wextra -Wshadow")
@@ -164,7 +159,7 @@ endif()
 find_package(spdlog REQUIRED)
 
 if(spdlog_FOUND)
-  target_link_libraries(${PROJECT_NAME} PRIVATE spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
+  target_link_libraries(${PROJECT_NAME} PUBLIC spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
 endif()
 
 
