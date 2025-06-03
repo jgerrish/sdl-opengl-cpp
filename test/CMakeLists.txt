@@ -65,6 +65,50 @@ endif()
 
 enable_testing()
 
-find_package(GTest CONFIG REQUIRED)
-target_compile_options(${TEST_MAIN} PRIVATE ${GTEST_CFLAGS})
-target_link_libraries(${TEST_MAIN} PRIVATE GTest::gmock GTest::gmock_main)
+find_package(GTest CONFIG)
+
+if (GTest_FOUND)
+  message(STATUS "Using GoogleTest from find_package")
+  target_compile_options(${TEST_MAIN} PRIVATE ${GTest_CFLAGS})
+  target_link_libraries(${TEST_MAIN} PRIVATE GTest::gmock GTest::gmock_main)
+else()
+  # Ubuntu doesn't compile the GoogleTest package, it's just a source
+  # package.  This is actually recommended by Google, otherwise there
+  # may be incompatible differences in compile flags.  So we have some
+  # extra logic here to build the source.
+
+  # TODO: Other distributions may put the source elsewhere
+  set(GTEST_DIR "/usr/src/googletest")
+
+  if(EXISTS ${GTEST_DIR} AND IS_DIRECTORY ${GTEST_DIR})
+    message(STATUS "GoogleTest directory exists in ${GTEST_DIR}")
+    set(GTEST_SRC_FOUND True)
+  endif()
+
+  if(GTEST_SRC_FOUND)
+    # The following two commented out subdirectories are built by
+    # googlemock, so they aren't needed.
+    #
+    # set(GTEST_ROOT "${GTEST_DIR}/googletest")
+    # add_subdirectory(${GTEST_ROOT} "${CMAKE_CURRENT_BINARY_DIR}/googletest" EXCLUDE_FROM_ALL)
+    #
+    # We just use gMock, and gMock depends on gTest.  It automatically
+    # creates a googletest build directory and builds in it.
+    set(GMOCK_ROOT "${GTEST_DIR}/googlemock")
+    add_subdirectory(${GMOCK_ROOT} "${CMAKE_CURRENT_BINARY_DIR}/googlemock" EXCLUDE_FROM_ALL)
+    target_link_libraries(${TEST_MAIN} PRIVATE GTest::gmock GTest::gmock_main)
+  endif()
+
+  # TODO: One final attempt could be made by pulling in with CMake's
+  # FetchContent
+  # The advantage to that is we can pin to a specific version of
+  # GoogleTest.  We can also build on a ton of more distributions.
+  # I'm trying to balance redundant trusted sources with stable builds
+  # and it's exhausting.
+  # On the plus side it's reusable work, I hope.
+endif()
+
+add_test(NAME ${TEST_MAIN} COMMAND $<TARGET_FILE:${TEST_MAIN}> --no-version)
+
+include(${PROJECT_SOURCE_DIR}/scripts/cmake/doctest.cmake)
+doctest_discover_tests(${TEST_MAIN})

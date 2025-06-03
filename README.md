@@ -21,7 +21,7 @@ pkg-config
 
 On Ubuntu, they can be installed with the following:
 
-apt install doxygen google-mock googletest libsdl2-dev libspdlog-dev pkg-config
+apt install doctest-dev doxygen google-mock googletest libsdl2-dev libspdlog-dev pkg-config
 
 doctest can be downloaded from GitHub:
 [doctest](https://github.com/doctest/doctest.git)

@@ -19,10 +19,8 @@
 using ::testing::_;
 using testing::Assign;
 using testing::ByRef;
-using testing::Rethrow;
 using testing::SaveArg;
 using testing::SetArgPointee;
-using testing::Throw;
 
 using namespace sdl_opengl_cpp;
 using namespace vertex_array_object;
