@@ -1,0 +1,15 @@
+{
+    "name": "sdl-opengl-cpp",
+    "version": "0.1.0",
+    "dependencies": [
+	"doctest",
+	{
+	    "name": "gtest",
+	    "features": [
+		"cxx17"
+	    ]
+	},
+	"sdl2",
+	"spdlog"
+    ]
+}

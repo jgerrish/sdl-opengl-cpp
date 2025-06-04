@@ -68,6 +68,37 @@ elseif(USE_GNUCXX)
 endif()
 
 
+# Some of the ideas here are from FetchVcpkg.cmake by Matthew Gibson
+# https://github.com/Chemiseblanc/cmake-utils
+# It is licensed under the Mozilla Public License Version 2.0
+# if(MSVC)
+#   # See if we're already running with vcpkg
+#   # Some people use a global vcpkg directory for all their projects.
+#   # We want to support both, so we can easily do CI builds and tests
+#   # and let users determine their own setup.
+#   if(NOT CMAKE_TOOLCHAIN_FILE MATCHES "vcpkg.cmake")
+#     # Include a local copy of vcpkg
+#     set(VCPKG_DIR "${CMAKE_SOURCE_DIR}/vcpkg")
+
+#     include(FetchContent)
+#     message("Fetching vcpkg")
+#     FetchContent_Declare(vcpkg
+#       GIT_REPOSITORY "https://github.com/microsoft/vcpkg.git"
+#       GIT_TAG "2025.04.09"
+#       GIT_SHALLOW True
+#       GIT_PROGRESS True
+#       SOURCE_DIR "${VCPKG_DIR}"
+#       CONFIGURE_COMMAND ""
+#     )
+#     FetchContent_MakeAvailable(vcpkg)
+
+#     if (NOT CMAKE_TOOLCHAIN_FILE STREQUAL "")
+#       set(VCPKG_CHAINLOAD_TOOLCHAIN_FILE CMAKE_TOOLCHAIN_FILE CACHE STRING "")
+#     endif()
+#     set(CMAKE_TOOLCHAIN_FILE "${VCPKG_DIR}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
+#   endif()
+# endif()
+
 # This will be configurable
 # I think we'll want to build two test targets,
 # _with_exceptions and _without_exceptions

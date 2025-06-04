@@ -69,7 +69,7 @@ Install prerequisites with vcpkg:
 
 For 64-bit machines:
 
-vcpkg.exe install doctest gtest[cxx17] pkgconfig sdl2 spdlog --triplet x64-windows
+vcpkg.exe install doctest gtest[cxx17] sdl2 spdlog --triplet x64-windows
 
 
 Generate CMake configuration
