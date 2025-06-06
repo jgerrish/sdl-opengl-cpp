@@ -11,6 +11,9 @@ shaders and programs.
 
 ## Prerequisites ##
 
+The following build tools are required:
+CMake
+
 The following libraries are required:
 SDL2
 spdlog
@@ -21,7 +24,7 @@ pkg-config
 
 On Ubuntu, they can be installed with the following:
 
-apt install doctest-dev doxygen google-mock googletest libsdl2-dev libspdlog-dev pkg-config
+apt install cmake doctest-dev doxygen google-mock googletest libsdl2-dev libspdlog-dev pkg-config
 
 doctest can be downloaded from GitHub:
 [doctest](https://github.com/doctest/doctest.git)

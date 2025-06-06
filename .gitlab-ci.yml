@@ -1,0 +1,49 @@
+# This GitLab CI file is based on the C++.gitlab-ci.yml template.
+
+# use the official gcc image, based on debian
+# can use versions as well, like gcc:5.2
+# see https://hub.docker.com/_/gcc/
+image: gcc
+
+variables:
+  BUILD_TYPE: "Release"
+  BUILD_DIR: "build"
+  CMAKE_GENERATOR: "Ninja"
+
+build:
+  stage: build
+  # instead of calling g++ directly you can also use some build toolkit like make
+  # install the necessary build tools when needed
+  before_script:
+    # Install prerequisites
+    - apt update -y
+    - apt install -y autoconf cmake doctest-dev doxygen google-mock googletest libsdl2-dev libspdlog-dev make ninja-build pkg-config
+  # before_script:
+  #   - apt update && apt -y install make autoconf
+  script:
+    - mkdir $BUILD_DIR
+    - cmake -G $CMAKE_GENERATOR -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_COMPILER=gcc -DCMAKE_BUILD_TYPE=$BUILD_TYPE -B $BUILD_DIR -S .
+    - cmake --build $BUILD_DIR --config $BUILD_TYPE
+  artifacts:
+    paths:
+      - $BUILD_DIR
+      # depending on your build setup it's most likely a good idea to
+      # cache outputs to reduce the build time
+      # cache:
+      #   paths:
+      #     - "*.o"
+
+# run tests using the binary built before
+test:
+  stage: test
+  before_script:
+    # Install prerequisites
+    - apt update -y
+    - apt install -y autoconf cmake doctest-dev doxygen google-mock googletest libsdl2-dev libspdlog-dev make ninja-build pkg-config
+  script:
+    - ctest --build-config $BUILD_TYPE --test-dir $BUILD_DIR/test
+
+# deploy:
+#   stage: deploy
+#   script: echo "Define your deployment script!"
+#   environment: production
