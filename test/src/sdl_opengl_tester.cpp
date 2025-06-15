@@ -46,12 +46,25 @@ SDLOpenGLTester::SDLOpenGLTester() {
         std::string(SDL_GetError());
 
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s", error_string.c_str());
+#ifndef NO_EXCEPTIONS
     spdlog::error(error_string);
-
     throw SDLInitFailed(error_string);
+#else
+    CHECK(false);
+    return;
+#endif
   }
 
-  rungl();
+  int res = rungl();
+
+  if (res != 0) {
+#ifndef NO_EXCEPTIONS
+    throw SDLInitFailed("rungl failed");
+#else
+    CHECK(false);
+    return;
+#endif
+  }
 }
 
 int SDLOpenGLTester::LoadContext() {
@@ -126,16 +139,28 @@ int SDLOpenGLTester::rungl() {
   sdl_gl_context = SDL_GL_CreateContext(window.get());
 
   if (!sdl_gl_context) {
+#ifndef NO_EXCEPTIONS
     spdlog::error("SDL_GL_CreateContext(): {}\n", SDL_GetError());
+#endif
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_GL_CreateContext(): %s\n",
                  SDL_GetError());
+#ifndef NO_EXCEPTIONS
     throw runtime_error("Error creating SDL_GL context");
+#else
+    CHECK(false);
+    return -1;
+#endif
   }
 
   /* Important: call this *after* creating the context */
   if (LoadContext() < 0) {
     SDL_Log("Could not load GL functions\n");
+#ifndef NO_EXCEPTIONS
     throw runtime_error("Error loading GL functions");
+#else
+    CHECK(false);
+    return -1;
+#endif
   }
 
   SDL_GetCurrentDisplayMode(0, &mode);

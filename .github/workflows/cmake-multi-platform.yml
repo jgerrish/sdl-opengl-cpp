@@ -26,6 +26,17 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         build_type: [Release]
         c_compiler: [gcc, clang, cl]
+        # Having a matrix approach to testing is useful, normally.
+        #
+        # This doubles the number of builds.  But because our current
+        # method of building on Windows is so expensive (we rebuild
+        # vcpkg packages every time), we don't actually want to
+        # include all combinations.
+        #
+        # Getting binary depencencies and artifacts built with
+        # reproducible signed builds is on the TODO list, but I also
+        # want to test a new user's typical workflow.
+        no_exceptions: [false, true]
         include:
           - os: windows-latest
             c_compiler: cl
@@ -46,6 +57,10 @@ jobs:
             c_compiler: gcc
           - os: windows-latest
             c_compiler: clang
+          - os: windows-latest
+            # See the note above about the cost of testing all
+            # combinations with vcpkg.
+            no_exceptions: true
           - os: ubuntu-latest
             c_compiler: cl
 
@@ -76,6 +91,7 @@ jobs:
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        -DNO_EXCEPTIONS=${{ matrix.no_exceptions }}
         -S ${{ github.workspace }}
 
     - name: Setup vcpkg

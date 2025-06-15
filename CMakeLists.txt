@@ -99,12 +99,16 @@ endif()
 #   endif()
 # endif()
 
-# This will be configurable
-# I think we'll want to build two test targets,
-# _with_exceptions and _without_exceptions
-# The CI system can then run both of them.
-
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNO_EXCEPTIONS=1")
+# This is configurable so we can test both code paths in CI and let
+# users easily build what version they want.
+# To disable exceptions, specify -DNO_EXCEPTIONS=true on the CMake
+# command line.
+if(NO_EXCEPTIONS)
+  message("NO_EXCEPTIONS=${NO_EXCEPTIONS} passed in to CMake, disabling exceptions")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNO_EXCEPTIONS=1 -fno-exceptions")
+else()
+  message("NO_EXCEPTIONS=${NO_EXCEPTIONS} passed in to CMake, enabling exceptions")
+endif()
 
 include_directories(include)
 

@@ -10,8 +10,8 @@ Program::Program(const string &program_name,
                  deque<unique_ptr<Shader>> &shaders)
     : name{program_name}, gl_context{ctx} {
   if (shaders.size() > MAX_SHADERS) {
-    spdlog::error("ERROR::SHADER::PROGRAM::CREATE_PROGRAM_FAILED::{}", name);
 #ifndef NO_EXCEPTIONS
+    spdlog::error("ERROR::SHADER::PROGRAM::CREATE_PROGRAM_FAILED::{}", name);
     throw ProgramCreationError("ERROR::SHADER::PROGRAM::CREATE_PROGRAM_FAILED");
 #else
     last_operation_failed = true;
@@ -28,8 +28,8 @@ Program::Program(const string &program_name,
   GLenum error = gl_context->glGetError();
 
   if ((error == GL_OUT_OF_MEMORY) || (program == 0)) {
-    spdlog::error("ERROR::SHADER::PROGRAM::CREATE_PROGRAM_FAILED::{}", name);
 #ifndef NO_EXCEPTIONS
+    spdlog::error("ERROR::SHADER::PROGRAM::CREATE_PROGRAM_FAILED::{}", name);
     throw ProgramCreationError("ERROR::SHADER::PROGRAM::CREATE_PROGRAM_FAILED");
 #else
     last_operation_failed = true;
@@ -131,12 +131,15 @@ void Program::link() {
     if (infoLen >= 1) {
       char *infoLog = new char[infoLen];
       if (infoLog == NULL) {
+#ifndef NO_EXCEPTIONS
         spdlog::error("ERROR::SHADER::MEMORY_ALLOC::{}", name);
+#endif
       } else {
         gl_context->glGetProgramInfoLog(program, infoLen, NULL, infoLog);
+#ifndef NO_EXCEPTIONS
         spdlog::error("ERROR::SHADER::PROGRAM::LINKING_FAILED::{}::{}", name,
                       infoLog);
-
+#endif
         delete[] infoLog;
       }
     }

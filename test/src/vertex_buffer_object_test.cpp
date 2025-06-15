@@ -532,9 +532,10 @@ TEST_SUITE("sdl_opengl_cpp_vertex_buffer_object") {
     if (vbo_tester.vbo) {
       vbo_tester.vbo->register_error_handler(
           [](const vertex_buffer_object::error &error) {
+#ifndef NO_EXCEPTIONS
             spdlog::info("Received error: {}",
                          vertex_buffer_object::error_as_string(error));
-
+#endif
             // Not working with the std::format code from
             // spdlog, need to investigate
             // spdlog::info("Received error: {}", my_type(error));

@@ -10,8 +10,8 @@ Shader::Shader(const string &name, const std::shared_ptr<GLContext> &ctx,
     : shader_name{name}, gl_context{ctx}, shader_type{type} {
   shader = gl_context->glCreateShader(type);
   if (shader == 0) {
-    spdlog::error("ERROR::SHADER::CREATE_SHADER_FAILED::{}", name);
 #ifndef NO_EXCEPTIONS
+    spdlog::error("ERROR::SHADER::CREATE_SHADER_FAILED::{}", name);
     throw ShaderCreationError("ERROR::SHADER::CREATE_SHADER_FAILED");
 #else
     last_operation_failed = true;
@@ -136,14 +136,20 @@ void Shader::compile(const string &src) {
     gl_context->glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
 
     if (infoLen >= 1) {
+#ifndef NO_EXCEPTIONS
       spdlog::info("Allocating infoLog of size {}", infoLen);
+#endif
       char *infoLog = new char[infoLen];
       if (infoLog == NULL) {
+#ifndef NO_EXCEPTIONS
         spdlog::error("ERROR::SHADER::MEMORY_ALLOC::{}", shader_name);
+#endif
       } else {
         gl_context->glGetShaderInfoLog(shader, infoLen, NULL, infoLog);
+#ifndef NO_EXCEPTIONS
         spdlog::error("ERROR::SHADER::COMPILATION_FAILED::{}::{}::src: {}",
                       shader_name, infoLog, src);
+#endif
 
         delete[] infoLog;
       }
