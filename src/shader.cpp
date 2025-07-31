@@ -15,7 +15,7 @@ Shader::Shader(const string &name, const std::shared_ptr<GLContext> &ctx,
     throw ShaderCreationError("ERROR::SHADER::CREATE_SHADER_FAILED");
 #else
     last_operation_failed = true;
-    last_error.emplace(shader::error::ShaderCreationError);
+    last_error.emplace(error::ShaderCreationError);
     cleanup();
     return;
 #endif
@@ -97,7 +97,7 @@ void Shader::compile(const string &src) {
     throw ShaderUnspecifiedStateError("Shader is in an unspecified state");
 #else
     last_operation_failed = true;
-    last_error.emplace(shader::error::ShaderUnspecifiedStateError);
+    last_error.emplace(error::UnspecifiedStateError);
     cleanup();
     return;
 #endif
@@ -158,7 +158,7 @@ void Shader::compile(const string &src) {
     throw ShaderCompilationError("ERROR::SHADER::COMPILATION_FAILED");
 #else
     last_operation_failed = true;
-    last_error.emplace(shader::error::ShaderCompilationError);
+    last_error.emplace(error::ShaderCompilationError);
     cleanup();
     return;
 #endif
@@ -176,14 +176,14 @@ bool Shader::valid() {
     if (!last_error) {
       // If we didn't do this it would require two calls to valid()
       last_operation_failed = true;
-      last_error.emplace(shader::error::ShaderUnspecifiedStateError);
+      last_error.emplace(error::UnspecifiedStateError);
     }
   }
 
   return !last_operation_failed;
 }
 
-std::optional<shader::error> Shader::get_last_error() {
+std::optional<error> Shader::get_last_error() {
   if ((gl_context == nullptr) || (shader == 0)) {
     if (!last_error) {
       // last_error hasn't been set yet.  There wasn't an error that
@@ -192,7 +192,7 @@ std::optional<shader::error> Shader::get_last_error() {
       //
       // If we didn't do this it would require two calls to get_last_error()
       last_operation_failed = true;
-      last_error.emplace(shader::error::ShaderUnspecifiedStateError);
+      last_error.emplace(error::UnspecifiedStateError);
     }
   }
 

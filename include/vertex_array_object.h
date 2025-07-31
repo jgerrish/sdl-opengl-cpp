@@ -13,6 +13,10 @@
 #include "SDL_opengl.h"
 #include <SDL.h>
 
+#ifdef NO_EXCEPTIONS
+#include "error.h"
+#endif
+
 #include "gl_context.h"
 
 #include "vertex_buffer_object.h"
@@ -60,16 +64,6 @@ class VertexArrayObjectUnspecifiedStateError : public runtime_error {
   // Inherit constructors from runtime_error
   using runtime_error::runtime_error;
 };
-
-#else
-
-enum class error {
-  GenBuffersError,
-  GenVertexArraysError,
-  InvalidOperationError,
-  VertexArrayObjectUnspecifiedStateError
-};
-
 #endif
 } // namespace vertex_array_object
 
@@ -151,10 +145,10 @@ public:
   //!
   //! If the error caused the object to be put into a "valid but
   //! uncertain state" then this method will return the error that
-  //! caused that, NOT VertexArrayObjectUnspecifiedStateError.  If
-  //! the operation that caused the "valid but unspecified state"
-  //! was just a move assignment or move constructor, then it should
-  //! return VertexArrayObjectUnspecifiedStateError.
+  //! caused that, NOT UnspecifiedStateError.  If the operation that
+  //! caused the "valid but unspecified state" was just a move
+  //! assignment or move constructor, then it should return
+  //! UnspecifiedStateError.
   //!
   //! This is a little confusing because getting put into a "valid
   //! but unspecified state" is not necessarily an error.  But for
@@ -163,7 +157,7 @@ public:
   //! unspecified state".
   //!
   //! \return the last error that occurred during a method call.
-  std::optional<vertex_array_object::error> get_last_error();
+  std::optional<error> get_last_error();
 #endif
 
 private:
@@ -182,7 +176,7 @@ private:
   bool last_operation_failed = false;
 
   //! The last error that occured, or std::nullopt if there was none.
-  std::optional<vertex_array_object::error> last_error = std::nullopt;
+  std::optional<error> last_error = std::nullopt;
 #endif
 };
 

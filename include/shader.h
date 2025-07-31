@@ -9,6 +9,10 @@
 #include "SDL_opengl.h"
 #include <SDL.h>
 
+#ifdef NO_EXCEPTIONS
+#include "error.h"
+#endif
+
 #include "opengl.h"
 
 #include "gl_context.h"
@@ -33,16 +37,6 @@ class ShaderCompilationError : public runtime_error {
   // Inherit constructors from runtime_error
   using runtime_error::runtime_error;
 };
-
-#else
-
-namespace shader {
-enum class error {
-  ShaderCreationError,
-  ShaderCompilationError,
-  ShaderUnspecifiedStateError
-};
-}
 
 #endif
 
@@ -141,7 +135,7 @@ public:
   //!
   //! \throws a ShaderCompilationError if there was an error
   //!         compiling the shader source.
-  //! \throws a ShaderUnspecifiedStateError if the shader is in an
+  //! \throws a UnspecifiedStateError if the shader is in an
   //!         unspecified state.
   void compile(const string &src);
 
@@ -175,10 +169,10 @@ public:
   //!
   //! If the error caused the object to be put into a "valid but
   //! uncertain state" then this method will return the error that
-  //! caused that, NOT ShaderUnspecifiedStateError.  If
-  //! the operation that caused the "valid but unspecified state"
-  //! was just a move assignment or move constructor, then it should
-  //! return ShaderUnspecifiedStateError.
+  //! caused that, NOT UnspecifiedStateError.  If the operation that
+  //! caused the "valid but unspecified state" was just a move
+  //! assignment or move constructor, then it should return
+  //! UnspecifiedStateError.
   //!
   //! This is a little confusing because getting put into a "valid
   //! but unspecified state" is not necessarily an error.  But for
@@ -187,7 +181,7 @@ public:
   //! unspecified state".
   //!
   //! \return the last error that occurred during a method call.
-  std::optional<shader::error> get_last_error();
+  std::optional<error> get_last_error();
 #endif
 
 private:
@@ -210,7 +204,7 @@ private:
   bool last_operation_failed = false;
 
   //! The last error that occured, or std::nullopt if there was none.
-  std::optional<shader::error> last_error = std::nullopt;
+  std::optional<error> last_error = std::nullopt;
 #endif
 };
 

@@ -114,6 +114,7 @@ include_directories(include)
 
 add_library(
   ${PROJECT_NAME}
+  src/error.cpp
   src/gl_context.cpp
   src/vertex_buffer_object.cpp
   src/vertex_array_object.cpp

@@ -10,6 +10,10 @@
 #include "SDL_opengl.h"
 #include <SDL.h>
 
+#ifdef NO_EXCEPTIONS
+#include "error.h"
+#endif
+
 #include "gl_context.h"
 #include "shader.h"
 
@@ -40,17 +44,6 @@ class ProgramUnspecifiedStateError : public runtime_error {
   // Inherit constructors from runtime_error
   using runtime_error::runtime_error;
 };
-
-#else
-
-namespace program {
-enum class error {
-  ProgramCreationError,
-  ProgramLinkingError,
-  GetUniformLocationError,
-  ProgramUnspecifiedStateError
-};
-}
 
 #endif
 
@@ -117,10 +110,9 @@ public:
   //! program id) associated with this Program object.  A better API
   //! might return the last "name" that was active.
   //!
-  //!
-  //! \throws a ProgramUnspecifiedStateError if the Program is in a
-  //!         valid but unspecified state after a C++ move
-  //!         assignment or construction.
+  //! \throws a UnspecifiedStateError if the Program is in a valid but
+  //!         unspecified state after a C++ move assignment or
+  //!         construction.
   GLuint use();
 
   //! Use the given OpenGL program "name" (GLuint program id) in the
@@ -130,10 +122,9 @@ public:
   //! program id) associated with this Program object.  A better API
   //! might return the last "name" that was active.
   //!
-  //!
-  //! \throws a ProgramUnspecifiedStateError if the Program is in a
-  //!         valid but unspecified state after a C++ move
-  //!         assignment or construction.
+  //! \throws a UnspecifiedStateError if the Program is in a valid but
+  //!         unspecified state after a C++ move assignment or
+  //!         construction.
   GLuint use(GLuint program_name);
 
   GLint getUniformLocation(const std::string &uniform_name_to_get);
@@ -163,10 +154,10 @@ public:
   //!
   //! If the error caused the object to be put into a "valid but
   //! uncertain state" then this method will return the error that
-  //! caused that, NOT ProgramUnspecifiedStateError.  If
-  //! the operation that caused the "valid but unspecified state"
-  //! was just a move assignment or move constructor, then it should
-  //! return ProgramUnspecifiedStateError.
+  //! caused that, NOT ProgramUnspecifiedStateError.  If the operation
+  //! that caused the "valid but unspecified state" was just a move
+  //! assignment or move constructor, then it should return
+  //! UnspecifiedStateError.
   //!
   //! This is a little confusing because getting put into a "valid
   //! but unspecified state" is not necessarily an error.  But for
@@ -175,7 +166,7 @@ public:
   //! unspecified state".
   //!
   //! \return the last error that occurred during a method call.
-  std::optional<program::error> get_last_error();
+  std::optional<error> get_last_error();
 #endif
 
 private:
@@ -205,7 +196,7 @@ private:
   bool last_operation_failed = false;
 
   //! The last error that occured, or std::nullopt if there was none.
-  std::optional<program::error> last_error = std::nullopt;
+  std::optional<error> last_error = std::nullopt;
 #endif
 };
 

@@ -160,7 +160,7 @@ TEST_CASE("testing that the Shader constructor sets ShaderCreationError error "
   if (shader_tester.shader) {
     CHECK(!shader_tester.shader->valid());
     CHECK_EQ(shader_tester.shader->get_last_error(),
-              shader::error::ShaderCreationError);
+             error::ShaderCreationError);
   } else {
     CHECK(false);
   }
@@ -282,7 +282,7 @@ TEST_CASE("testing that the Shader sets ShaderCompilationError code with "
   if (shader_tester.shader) {
     CHECK_EQ(shader_tester.shader->valid(), false);
     CHECK_EQ(shader_tester.shader->get_last_error(),
-             shader::error::ShaderCompilationError);
+             error::ShaderCompilationError);
   } else {
     CHECK(false);
   }

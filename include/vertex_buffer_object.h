@@ -13,6 +13,10 @@
 #include "SDL_opengl.h"
 #include <SDL.h>
 
+#ifdef NO_EXCEPTIONS
+#include "error.h"
+#endif
+
 #include "opengl.h"
 
 #include "gl_context.h"
@@ -89,12 +93,6 @@ class VertexBufferObjectUnspecifiedStateError : public runtime_error {
 // duplicating all the error registration and error setting code
 // in every class is very not DRY.  So we should add some error
 // manager class and clean this up.
-enum class error {
-  BufferDataError,
-  GenBuffersError,
-  InvalidOperationError,
-  VertexBufferObjectUnspecifiedStateError
-};
 
 // See the comment in vertex_buffer_object.cpp about spdlog formatters
 // not working.
@@ -102,9 +100,6 @@ enum class error {
 //   error err;
 //   explicit my_type(error e) : err(e) { }
 // };
-
-extern ostream &operator<<(std::ostream &os, const error &e);
-extern std::string error_as_string(const error &e);
 
 #endif
 
@@ -186,10 +181,10 @@ public:
   //!
   //! If the error caused the object to be put into a "valid but
   //! uncertain state" then this method will return the error that
-  //! caused that, NOT VertexBufferObjectUnspecifiedStateError.  If
-  //! the operation that caused the "valid but unspecified state"
-  //! was just a move assignment or move constructor, then it should
-  //! return VertexBufferObjectUnspecifiedStateError.
+  //! caused that, NOT UnspecifiedStateError.  If the operation that
+  //! caused the "valid but unspecified state" was just a move
+  //! assignment or move constructor, then it should return
+  //! UnspecifiedStateError.
   //!
   //! This is a little confusing because getting put into a "valid
   //! but unspecified state" is not necessarily an error.  But for
@@ -198,7 +193,7 @@ public:
   //! unspecified state".
   //!
   //! \return the last error that occurred during a method call.
-  std::optional<vertex_buffer_object::error> get_last_error();
+  std::optional<error> get_last_error();
 
   //! Set the error code
   //!
@@ -208,7 +203,7 @@ public:
   //!
   //! \return true if the error state changed
   //!         false if there was no change in the error state
-  bool set_error(const std::optional<vertex_buffer_object::error> &error);
+  bool set_error(const std::optional<error> &error);
 
   //! Register an error handler
   //!
@@ -230,8 +225,7 @@ public:
   //! \return 0 on success, nonzero on an error registering the
   //!         error handler
   int register_error_handler(
-      const std::function<void(const vertex_buffer_object::error &error)>
-          &handler);
+      const std::function<void(const error &error)> &handler);
 
 #endif
 
@@ -270,11 +264,11 @@ private:
   bool last_operation_failed = false;
 
   //! The last error that occured, or std::nullopt if there was none.
-  std::optional<vertex_buffer_object::error> last_error = std::nullopt;
+  std::optional<error> last_error = std::nullopt;
 
   //! The error callback function
-  std::optional<std::function<void(const vertex_buffer_object::error &error)>>
-      error_handler = std::nullopt;
+  std::optional<std::function<void(const error &error)>> error_handler =
+      std::nullopt;
 
 #endif
 };

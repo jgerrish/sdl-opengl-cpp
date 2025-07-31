@@ -172,7 +172,7 @@ TEST_CASE("testing that VertexArrayObject constructor sets error flag") {
   if (vao_tester.vao) {
     CHECK_EQ(vao_tester.vao->valid(), false);
     CHECK_EQ(vao_tester.vao->get_last_error(),
-             vertex_array_object::error::GenVertexArraysError);
+             sdl_opengl_cpp::error::GenVertexArraysError);
   } else {
     CHECK(false);
   }
@@ -444,9 +444,8 @@ TEST_CASE("testing that VertexArrayObject bind() sets error flag when the VAO "
 
   if (vao_tester.vao) {
     CHECK_EQ(vao_tester.vao->valid(), false);
-    CHECK_EQ(
-        vao_tester.vao->get_last_error(),
-        vertex_array_object::error::VertexArrayObjectUnspecifiedStateError);
+    CHECK_EQ(vao_tester.vao->get_last_error(),
+             sdl_opengl_cpp::error::UnspecifiedStateError);
   } else {
     CHECK(false);
   }

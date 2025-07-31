@@ -15,7 +15,7 @@ Program::Program(const string &program_name,
     throw ProgramCreationError("ERROR::SHADER::PROGRAM::CREATE_PROGRAM_FAILED");
 #else
     last_operation_failed = true;
-    last_error.emplace(program::error::ProgramCreationError);
+    last_error.emplace(error::ProgramCreationError);
     cleanup();
     return;
 #endif
@@ -33,7 +33,7 @@ Program::Program(const string &program_name,
     throw ProgramCreationError("ERROR::SHADER::PROGRAM::CREATE_PROGRAM_FAILED");
 #else
     last_operation_failed = true;
-    last_error.emplace(program::error::ProgramCreationError);
+    last_error.emplace(error::ProgramCreationError);
     cleanup();
     return;
 #endif
@@ -109,7 +109,7 @@ void Program::link() {
     throw ProgramUnspecifiedStateError("Program is in an unspecified state");
 #else
     last_operation_failed = true;
-    last_error.emplace(program::error::ProgramUnspecifiedStateError);
+    last_error.emplace(error::UnspecifiedStateError);
     cleanup();
     return;
 #endif
@@ -148,7 +148,7 @@ void Program::link() {
     throw ProgramLinkingError("ERROR::SHADER::PROGRAM::LINKING_FAILED");
 #else
     last_operation_failed = true;
-    last_error.emplace(program::error::ProgramLinkingError);
+    last_error.emplace(error::ProgramLinkingError);
     cleanup();
     return;
 #endif
@@ -163,7 +163,7 @@ GLuint Program::use() {
     throw ProgramUnspecifiedStateError("Program is in an unspecified state");
 #else
     last_operation_failed = true;
-    last_error.emplace(program::error::ProgramUnspecifiedStateError);
+    last_error.emplace(error::UnspecifiedStateError);
     cleanup();
     return 0;
 #endif
@@ -184,7 +184,7 @@ GLuint Program::use(GLuint program_name) {
     throw ProgramUnspecifiedStateError("Program is in an unspecified state");
 #else
     last_operation_failed = true;
-    last_error.emplace(program::error::ProgramUnspecifiedStateError);
+    last_error.emplace(error::UnspecifiedStateError);
     cleanup();
     return 0;
 #endif
@@ -206,7 +206,7 @@ GLint Program::getUniformLocation(const std::string &uniform_name_to_get) {
     throw ProgramUnspecifiedStateError("Program is in an unspecified state");
 #else
     last_operation_failed = true;
-    last_error.emplace(program::error::ProgramUnspecifiedStateError);
+    last_error.emplace(error::UnspecifiedStateError);
     cleanup();
     return -1;
 #endif
@@ -220,7 +220,7 @@ GLint Program::getUniformLocation(const std::string &uniform_name_to_get) {
     throw GetUniformLocationError("Couldn't get location of uniform");
 #else
     last_operation_failed = true;
-    last_error.emplace(program::error::GetUniformLocationError);
+    last_error.emplace(error::GetUniformLocationError);
     cleanup();
     return -1;
 #endif

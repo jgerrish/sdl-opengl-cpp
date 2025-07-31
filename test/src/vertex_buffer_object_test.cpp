@@ -157,8 +157,7 @@ TEST_SUITE("sdl_opengl_cpp_vertex_buffer_object") {
     VertexBufferObjectTester vbo_tester(mock_opengl_context);
     if (vbo_tester.vbo) {
       CHECK_EQ(vbo_tester.vbo->valid(), false);
-      CHECK_EQ(vbo_tester.vbo->get_last_error(),
-               vertex_buffer_object::error::GenBuffersError);
+      CHECK_EQ(vbo_tester.vbo->get_last_error(), error::GenBuffersError);
     } else {
       CHECK(false);
     }
@@ -455,9 +454,7 @@ TEST_SUITE("sdl_opengl_cpp_vertex_buffer_object") {
 
     if (vbo_tester.vbo) {
       CHECK_EQ(vbo_tester.vbo->valid(), false);
-      CHECK_EQ(
-          vbo_tester.vbo->get_last_error(),
-          vertex_buffer_object::error::VertexBufferObjectUnspecifiedStateError);
+      CHECK_EQ(vbo_tester.vbo->get_last_error(), error::UnspecifiedStateError);
     } else {
       CHECK(false);
     }
@@ -530,16 +527,14 @@ TEST_SUITE("sdl_opengl_cpp_vertex_buffer_object") {
     }
 
     if (vbo_tester.vbo) {
-      vbo_tester.vbo->register_error_handler(
-          [](const vertex_buffer_object::error &error) {
+      vbo_tester.vbo->register_error_handler([](const error &error) {
 #ifndef NO_EXCEPTIONS
-            spdlog::info("Received error: {}",
-                         vertex_buffer_object::error_as_string(error));
+        spdlog::info("Received error: {}", error_as_string(error));
 #endif
-            // Not working with the std::format code from
-            // spdlog, need to investigate
-            // spdlog::info("Received error: {}", my_type(error));
-          });
+        // Not working with the std::format code from
+        // spdlog, need to investigate
+        // spdlog::info("Received error: {}", my_type(error));
+      });
     }
 
     // Set the VBO to an invalid state (0 for OpenGL)
@@ -553,9 +548,7 @@ TEST_SUITE("sdl_opengl_cpp_vertex_buffer_object") {
 
     if (vbo_tester.vbo) {
       CHECK_EQ(vbo_tester.vbo->valid(), false);
-      CHECK_EQ(
-          vbo_tester.vbo->get_last_error(),
-          vertex_buffer_object::error::VertexBufferObjectUnspecifiedStateError);
+      CHECK_EQ(vbo_tester.vbo->get_last_error(), error::UnspecifiedStateError);
     } else {
       CHECK(false);
     }

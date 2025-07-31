@@ -8,68 +8,6 @@
 using namespace sdl_opengl_cpp;
 using namespace sdl_opengl_cpp::vertex_buffer_object;
 
-#ifdef NO_EXCEPTIONS
-
-ostream &sdl_opengl_cpp::vertex_buffer_object::operator<<(std::ostream &os,
-                                                          const error &e) {
-  os << error_as_string(e);
-
-  return os;
-}
-
-std::string
-sdl_opengl_cpp::vertex_buffer_object::error_as_string(const error &e) {
-  std::string error_string;
-
-  switch (e) {
-  case error::BufferDataError:
-    error_string = "BufferDataError";
-    break;
-  case error::GenBuffersError:
-    error_string = "GenBuffersError";
-    break;
-  case error::InvalidOperationError:
-    error_string = "InvalidOperationError";
-    break;
-  case error::VertexBufferObjectUnspecifiedStateError:
-    error_string = "VertexBufferObjectUnspecifiedStateError";
-    break;
-  default:
-    error_string = "Unknown error type";
-    break;
-  }
-
-  return error_string;
-}
-
-// The below spdlog formatters aren't working with the error type currently
-// spdlog/fmt/bundled/base.h:2235:45: error:
-// ‘fmt::v11::detail::type_is_unformattable_for<sdl_opengl_cpp::vertex_buffer_object::my_type,
-// char> _’ has incomplete type
-
-// #ifndef SPDLOG_USE_STD_FORMAT  // when using fmtlib
-// template <>
-// struct fmt::formatter<my_type> : fmt::formatter<std::string> {
-//     auto format(my_type my, format_context &ctx) const -> decltype(ctx.out())
-//     {
-//       return fmt::format_to(ctx.out(), "[error i={}]",
-//       error_as_string(my.err));
-//     }
-// };
-
-// #else  // when using std::format
-// template <>
-// struct std::formatter<my_type> : std::formatter<std::string> {
-//     auto format(my_type my, format_context &ctx) const -> decltype(ctx.out())
-//     {
-//       return std::format_to(ctx.out(), "[error i={}]",
-//       error_as_string(my.err));
-//     }
-// };
-// #endif
-
-#endif
-
 VertexBufferObject::VertexBufferObject(const string &buffer_name,
                                        const std::shared_ptr<GLContext> &ctx,
                                        const vector<GLfloat> &data)
@@ -116,8 +54,7 @@ VertexBufferObject::VertexBufferObject(const string &buffer_name,
 #ifndef NO_EXCEPTIONS
     throw GenBuffersError("ERROR::VERTEX_BUFFER::GEN_BUFFERS_FAILED");
 #else
-    set_error(
-        std::optional<vertex_buffer_object::error>(error::GenBuffersError));
+    set_error(std::optional<sdl_opengl_cpp::error>(error::GenBuffersError));
     cleanup();
     // If we return here, and last_operation_failed is set to false in
     // the class declaration, it is set to false after we set it to
@@ -142,8 +79,8 @@ VertexBufferObject::VertexBufferObject(const string &buffer_name,
     throw InvalidOperationError(
         "ERROR::VERTEX_BUFFER::INVALID_OPERATION_ERROR");
 #else
-    set_error(std::optional<vertex_buffer_object::error>(
-        error::InvalidOperationError));
+    set_error(
+        std::optional<sdl_opengl_cpp::error>(error::InvalidOperationError));
     cleanup();
     // If we return here, and last_operation_failed is set to false in
     // the class declaration, it is set to false after we set it to
@@ -190,16 +127,14 @@ bool VertexBufferObject::valid() {
   if ((gl_context == nullptr) || (VBO == 0)) {
     if (!last_error) {
       // If we didn't do this it would require two calls to valid()
-      set_error(
-          std::optional<error>(error::VertexBufferObjectUnspecifiedStateError));
+      set_error(std::optional<error>(error::UnspecifiedStateError));
     }
   }
 
   return !last_operation_failed;
 }
 
-std::optional<vertex_buffer_object::error>
-VertexBufferObject::get_last_error() {
+std::optional<error> VertexBufferObject::get_last_error() {
   if ((gl_context == nullptr) || (VBO == 0)) {
     if (!last_error) {
       // last_error hasn't been set yet.  There wasn't an error that
@@ -207,16 +142,14 @@ VertexBufferObject::get_last_error() {
       // move construction or assignment.
       //
       // If we didn't do this it would require two calls to get_last_error()
-      set_error(
-          std::optional<error>(error::VertexBufferObjectUnspecifiedStateError));
+      set_error(std::optional<error>(error::UnspecifiedStateError));
     }
   }
 
   return last_error;
 }
 
-bool VertexBufferObject::set_error(
-    const std::optional<vertex_buffer_object::error> &error) {
+bool VertexBufferObject::set_error(const std::optional<error> &error) {
   bool state_changed = false;
 
   if (last_error != error) {
@@ -255,8 +188,7 @@ bool VertexBufferObject::set_error(
 }
 
 int VertexBufferObject::register_error_handler(
-    const std::function<void(const vertex_buffer_object::error &error)>
-        &handler) {
+    const std::function<void(const error &error)> &handler) {
   error_handler.emplace(handler);
   return 0;
 }
@@ -315,8 +247,7 @@ void VertexBufferObject::bind() {
     throw VertexBufferObjectUnspecifiedStateError(
         "Vertex Buffer Object is in an unspecified state");
 #else
-    set_error(
-        std::optional<error>(error::VertexBufferObjectUnspecifiedStateError));
+    set_error(std::optional<error>(error::UnspecifiedStateError));
     return;
 #endif
   }

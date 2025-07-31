@@ -34,7 +34,7 @@ VertexArrayObject::VertexArrayObject(const string &array_name,
     throw GenVertexArraysError("ERROR::VERTEX_ARRAY::GEN_VERTEX_ARRAYS_FAILED");
 #else
     last_operation_failed = true;
-    last_error.emplace(vertex_array_object::error::GenVertexArraysError);
+    last_error.emplace(sdl_opengl_cpp::error::GenVertexArraysError);
     cleanup();
     return;
 #endif
@@ -50,7 +50,7 @@ VertexArrayObject::VertexArrayObject(const string &array_name,
         "ERROR::VERTEX_ARRAY::INVALID_OPERATION_ERROR");
 #else
     last_operation_failed = true;
-    last_error.emplace(vertex_array_object::error::InvalidOperationError);
+    last_error.emplace(sdl_opengl_cpp::error::InvalidOperationError);
     cleanup();
     return;
 #endif
@@ -70,7 +70,7 @@ VertexArrayObject::VertexArrayObject(const string &array_name,
         "ERROR::VERTEX_ARRAY::INVALID_OPERATION_ERROR");
 #else
     last_operation_failed = true;
-    last_error.emplace(vertex_array_object::error::InvalidOperationError);
+    last_error.emplace(sdl_opengl_cpp::error::InvalidOperationError);
     cleanup();
     return;
 #endif
@@ -145,8 +145,7 @@ void VertexArrayObject::bind() {
         "Vertex Array Object is in an unspecified state");
 #else
     last_operation_failed = true;
-    last_error.emplace(
-        vertex_array_object::error::VertexArrayObjectUnspecifiedStateError);
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
     return;
 #endif
   }
@@ -166,15 +165,14 @@ bool VertexArrayObject::valid() {
     if (!last_error) {
       // If we didn't do this it would require two calls to valid()
       last_operation_failed = true;
-      last_error.emplace(
-          vertex_array_object::error::VertexArrayObjectUnspecifiedStateError);
+      last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
     }
   }
 
   return !last_operation_failed;
 }
 
-std::optional<vertex_array_object::error> VertexArrayObject::get_last_error() {
+std::optional<error> VertexArrayObject::get_last_error() {
   if ((gl_context == nullptr) || (VAO == 0)) {
     if (!last_error) {
       // last_error hasn't been set yet.  There wasn't an error that
@@ -183,8 +181,7 @@ std::optional<vertex_array_object::error> VertexArrayObject::get_last_error() {
       //
       // If we didn't do this it would require two calls to get_last_error()
       last_operation_failed = true;
-      last_error.emplace(
-          vertex_array_object::error::VertexArrayObjectUnspecifiedStateError);
+      last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
     }
   }
 
