@@ -139,7 +139,7 @@ void VertexArrayObject::bind() {
   //
   // scoped_lock lck { vbo_mutex };
 
-  if ((gl_context == nullptr) || (VAO == 0)) {
+  if (is_in_unspecified_state()) {
 #ifndef NO_EXCEPTIONS
     throw VertexArrayObjectUnspecifiedStateError(
         "Vertex Array Object is in an unspecified state");
@@ -158,34 +158,10 @@ void VertexArrayObject::bind() {
 #endif
 }
 
-#ifdef NO_EXCEPTIONS
-
-bool VertexArrayObject::valid() {
-  if ((gl_context == nullptr) || (VAO == 0)) {
-    if (!last_error) {
-      // If we didn't do this it would require two calls to valid()
-      last_operation_failed = true;
-      last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
-    }
-  }
-
-  return !last_operation_failed;
+// Implement checking for an unspecified state
+bool VertexArrayObject::is_in_unspecified_state() {
+  if ((gl_context == nullptr) || (VAO == 0))
+    return true;
+  else
+    return false;
 }
-
-std::optional<error> VertexArrayObject::get_last_error() {
-  if ((gl_context == nullptr) || (VAO == 0)) {
-    if (!last_error) {
-      // last_error hasn't been set yet.  There wasn't an error that
-      // caused gl_context or VBO to be reset, so we assume it was a
-      // move construction or assignment.
-      //
-      // If we didn't do this it would require two calls to get_last_error()
-      last_operation_failed = true;
-      last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
-    }
-  }
-
-  return last_error;
-}
-
-#endif

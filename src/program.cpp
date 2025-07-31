@@ -104,7 +104,7 @@ void Program::link() {
 
   // This check is needed because we use move constructors and
   // assignment operators
-  if ((gl_context == nullptr) || (program == 0)) {
+  if (is_in_unspecified_state()) {
 #ifndef NO_EXCEPTIONS
     throw ProgramUnspecifiedStateError("Program is in an unspecified state");
 #else
@@ -158,7 +158,7 @@ void Program::link() {
 GLuint Program::use() {
   // This check is needed because we use move constructors and
   // assignment operators
-  if ((gl_context == nullptr) || (program == 0)) {
+  if (is_in_unspecified_state()) {
 #ifndef NO_EXCEPTIONS
     throw ProgramUnspecifiedStateError("Program is in an unspecified state");
 #else
@@ -179,7 +179,7 @@ GLuint Program::use(GLuint program_name) {
 
   // This check is needed because we use move constructors and
   // assignment operators
-  if ((gl_context == nullptr) || (program == 0)) {
+  if (is_in_unspecified_state()) {
 #ifndef NO_EXCEPTIONS
     throw ProgramUnspecifiedStateError("Program is in an unspecified state");
 #else
@@ -201,7 +201,7 @@ GLuint Program::use(GLuint program_name) {
 GLint Program::getUniformLocation(const std::string &uniform_name_to_get) {
   // This check is needed because we use move constructors and
   // assignment operators
-  if ((gl_context == nullptr) || (program == 0)) {
+  if (is_in_unspecified_state()) {
 #ifndef NO_EXCEPTIONS
     throw ProgramUnspecifiedStateError("Program is in an unspecified state");
 #else
@@ -227,6 +227,14 @@ GLint Program::getUniformLocation(const std::string &uniform_name_to_get) {
   }
 
   return location;
+}
+
+// Implement checking for an unspecified state
+bool Program::is_in_unspecified_state() {
+  if ((gl_context == nullptr) || (program == 0))
+    return true;
+  else
+    return false;
 }
 
 // Experiments with scoped_use are disabled for now.

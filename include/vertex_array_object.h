@@ -14,7 +14,9 @@
 #include <SDL.h>
 
 #ifdef NO_EXCEPTIONS
-#include "error.h"
+#include "errors.h"
+#else
+#include "move_checker.h"
 #endif
 
 #include "gl_context.h"
@@ -88,7 +90,11 @@ using namespace vertex_array_object;
 //! deletion.  The owned VertexBufferObject is also cleaned up.
 //!
 //! It is up to the user to cleanup their own data.
-class VertexArrayObject {
+#ifndef NO_EXCEPTIONS
+class VertexArrayObject : private MoveChecker {
+#else
+class VertexArrayObject : public Errors {
+#endif
   // This is one way of allowing us to test private member variables
   // and state.
   friend class VertexArrayObjectTester;
@@ -118,47 +124,9 @@ public:
   // move assignment operator
   VertexArrayObject &operator=(VertexArrayObject &&) noexcept;
 
+  bool is_in_unspecified_state() override;
+
   void bind();
-
-#ifdef NO_EXCEPTIONS
-  //! Return true if the last VertexArrayObject method call was
-  //! successful.
-  //!
-  //! This method will also return false if the VertexArrayObject
-  //! is in a "valid but unspecified state", for example after a
-  //! move assignment or move construction.  This is so that the
-  //! user doesn't have to call it twice.  It should ALWAYS return
-  //! false if the object can't be used or the last operation had an
-  //! error.
-  //!
-  //! If this library has been compiled with NO_EXCEPTIONS defined,
-  //! this must be called after every function that can throw an
-  //! error.
-  //!
-  //! \return true if the last VertexArrayObject function call was
-  //!         successful AND the object is not in a "valid but
-  //!         unspecified state".
-  bool valid();
-
-  //! If the object is not valid(), this method will get the last error
-  //! that occurred.
-  //!
-  //! If the error caused the object to be put into a "valid but
-  //! uncertain state" then this method will return the error that
-  //! caused that, NOT UnspecifiedStateError.  If the operation that
-  //! caused the "valid but unspecified state" was just a move
-  //! assignment or move constructor, then it should return
-  //! UnspecifiedStateError.
-  //!
-  //! This is a little confusing because getting put into a "valid
-  //! but unspecified state" is not necessarily an error.  But for
-  //! the valid() call and any subsequent call, it is an error, but
-  //! the object was attempted to be used in a "valid but
-  //! unspecified state".
-  //!
-  //! \return the last error that occurred during a method call.
-  std::optional<error> get_last_error();
-#endif
 
 private:
   string name;
@@ -170,14 +138,6 @@ private:
 
   // OpenGL Vertex Array Object
   GLuint VAO = 0;
-
-#ifdef NO_EXCEPTIONS
-  //! Whether the last operation failed
-  bool last_operation_failed = false;
-
-  //! The last error that occured, or std::nullopt if there was none.
-  std::optional<error> last_error = std::nullopt;
-#endif
 };
 
 } // namespace sdl_opengl_cpp

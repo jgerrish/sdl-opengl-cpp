@@ -92,7 +92,7 @@ void Shader::compile(const string &src) {
 
   // This check is needed because we use move constructors and
   // assignment operators
-  if ((gl_context == nullptr) || (shader == 0)) {
+  if (is_in_unspecified_state()) {
 #ifndef NO_EXCEPTIONS
     throw ShaderUnspecifiedStateError("Shader is in an unspecified state");
 #else
@@ -169,34 +169,10 @@ void Shader::compile(const string &src) {
 
 GLuint Shader::openGLName() { return shader; }
 
-#ifdef NO_EXCEPTIONS
-
-bool Shader::valid() {
-  if ((gl_context == nullptr) || (shader == 0)) {
-    if (!last_error) {
-      // If we didn't do this it would require two calls to valid()
-      last_operation_failed = true;
-      last_error.emplace(error::UnspecifiedStateError);
-    }
-  }
-
-  return !last_operation_failed;
+// Implement checking for an unspecified state
+bool Shader::is_in_unspecified_state() {
+  if ((gl_context == nullptr) || (shader == 0))
+    return true;
+  else
+    return false;
 }
-
-std::optional<error> Shader::get_last_error() {
-  if ((gl_context == nullptr) || (shader == 0)) {
-    if (!last_error) {
-      // last_error hasn't been set yet.  There wasn't an error that
-      // caused gl_context or VBO to be reset, so we assume it was a
-      // move construction or assignment.
-      //
-      // If we didn't do this it would require two calls to get_last_error()
-      last_operation_failed = true;
-      last_error.emplace(error::UnspecifiedStateError);
-    }
-  }
-
-  return last_error;
-}
-
-#endif
