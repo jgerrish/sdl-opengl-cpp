@@ -1,6 +1,8 @@
 // The file is originally from the SDL2 project.  Included below is
 // the license from the file.
 
+#include "SDL_opengl.h"
+
 /*
   Simple DirectMedia Layer
   Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
