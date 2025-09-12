@@ -142,3 +142,39 @@ void GLContext::glGetAttachedShaders(GLuint program, GLsizei maxCount,
 void GLContext::glDeleteProgram(GLuint program) {
   return gl_context->glDeleteProgram(program);
 }
+
+// Misc functions
+// Needed for initialization
+
+void GLContext::glMatrixMode(GLenum mode) {
+  return gl_context->glMatrixMode(mode);
+}
+
+void GLContext::glLoadIdentity() { return gl_context->glLoadIdentity(); }
+
+void GLContext::glOrtho(GLdouble left, GLdouble right, GLdouble bottom,
+                        GLdouble top, GLdouble zNear, GLdouble zFar) {
+  return gl_context->glOrtho(left, right, bottom, top, zNear, zFar);
+}
+
+void GLContext::glEnable(GLenum cap) { return gl_context->glEnable(cap); }
+
+void GLContext::glDepthFunc(GLenum func) {
+  return gl_context->glDepthFunc(func);
+}
+
+void GLContext::glShadeModel(GLenum mode) {
+  return gl_context->glShadeModel(mode);
+}
+
+void GLContext::glClearColor(GLclampf r, GLclampf g, GLclampf b, GLclampf a) {
+  return gl_context->glClearColor(r, g, b, a);
+}
+
+void GLContext::glColor3fv(const GLfloat *color) {
+  return gl_context->glColor3fv(color);
+}
+
+void GLContext::glViewport(GLint x, GLint y, GLsizei width, GLsizei height) {
+  return gl_context->glViewport(x, y, width, height);
+}

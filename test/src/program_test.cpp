@@ -3,7 +3,6 @@
 #define HAVE_OPENGL
 
 #include "SDL_opengl.h"
-#include "SDL_test_common.h"
 #include "opengl.h"
 #include "program.h"
 #include "program_test.h"

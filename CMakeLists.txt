@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.13)
 # structures and functions.
 # Right now, that includes programs, shaders, Vertex Array Objects and
 # Vertex Buffer Objects.
-project(sdl-opengl-cpp VERSION 0.1.0)
+project(sdl-opengl-cpp VERSION 0.2.0)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -116,7 +116,11 @@ add_library(
   ${PROJECT_NAME}
   src/error.cpp
   src/errors.cpp
+  src/sdl.cpp
   src/gl_context.cpp
+  src/sdl_wrapper.cpp
+  src/sdl_window.cpp
+  src/sdl_opengl.cpp
   src/vertex_buffer_object.cpp
   src/vertex_array_object.cpp
   src/shader.cpp

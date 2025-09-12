@@ -5,7 +5,6 @@
 #define HAVE_OPENGL
 
 #include "SDL_opengl.h"
-#include "SDL_test_common.h"
 #include "opengl.h"
 #include "vertex_array_object.h"
 #include "vertex_array_object_test.h"

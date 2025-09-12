@@ -3,13 +3,13 @@
 #include <memory>
 #include <string>
 
+#ifndef NO_EXCEPTIONS
 #include "spdlog/spdlog.h"
+#endif
 
 #include <doctest/doctest.h>
 
 #define HAVE_OPENGL
-
-#include "SDL_test_common.h"
 
 #include "gl_context.h"
 
@@ -36,25 +36,9 @@ int main(int argc, char **argv) {
 }
 
 using namespace sdl_opengl_cpp;
+using namespace sdl_opengl_cpp::sdl_window;
 
-SDLOpenGLTester::SDLOpenGLTester() {
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    // We may lose stack trace and SDL error info if we fail on
-    // building a string here
-    string error_string =
-        std::string("Couldn't initialize SDL.  SDL_Init failed: ") +
-        std::string(SDL_GetError());
-
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s", error_string.c_str());
-#ifndef NO_EXCEPTIONS
-    spdlog::error(error_string);
-    throw SDLInitFailed(error_string);
-#else
-    CHECK(false);
-    return;
-#endif
-  }
-
+SDLOpenGLTester::SDLOpenGLTester(const std::shared_ptr<SDL> &sdl_) : sdl(sdl_) {
   int res = rungl();
 
   if (res != 0) {
@@ -76,6 +60,7 @@ int SDLOpenGLTester::LoadContext() {
 #define __SDL_NOGETPROCADDR__
 #endif
 
+// TODO: Get SDL_GL_GetProcAddress wrapped up somehow
 #if defined __SDL_NOGETPROCADDR__
 #define SDL_PROC(ret, func, params) gl_context.func = func;
 #else
@@ -95,30 +80,12 @@ int SDLOpenGLTester::LoadContext() {
   return 0;
 }
 
-static void LogSwapInterval(void);
-static void LogSwapInterval(void) {
-  SDL_Log("Swap Interval : %d\n", SDL_GL_GetSwapInterval());
-}
-
-void SDL_Window_Deleter::operator()(SDL_Window *window) {
-  if (window == nullptr)
-    return;
-
-  SDL_DestroyWindow(window);
-
-  SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "deleting window");
-  // TODO Why is this crashing?  Lifetime of spdlog?  I'm curious.
-  // concurrency bug?  It doesn't crash every run
-  // It crashes supposedly on __atomic_load_n
-  // I can't even figure out where that function lives.
-  // stepping into it fails in gdb, maybe because it's a macro.
-  // spdlog::info(log_start_del_msg);
-  // // SPDLOG_INFO("Deleting SDL_Window");
-
-  SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "deleted window");
-  // TODO Why is this crashing?  I'm curious.
-  // spdlog::info("Deleted SDL_Window");
-  // spdlog::info(log_end_del_msg);
+void SDLOpenGLTester::LogSwapInterval(void) {
+#ifndef NO_EXCEPTIONS
+  spdlog::info("Swap Interval : %d", sdl->sdl_wrapper->GL_GetSwapInterval());
+#else
+  sdl->sdl_wrapper->Log("Swap Interval : %d\n", SDL_GL_GetSwapInterval());
+#endif
 }
 
 // Careful, these tests already use move constructors and assignment
@@ -130,20 +97,23 @@ int SDLOpenGLTester::rungl() {
   SDL_DisplayMode mode;
 
   /* Enable standard application logging */
-  SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO);
+  // sdl->sdl_wrapper->LogSetPriority(SDL_LOG_CATEGORY_APPLICATION,
+  // SDL_LOG_PRIORITY_INFO);
 
-  window = std::unique_ptr<SDL_Window, SDL_Window_Deleter>(SDL_CreateWindow(
-      "SDLOpenGLTester", 0, 0, 640, 480, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN));
+  window = std::make_unique<SDLWindow>(
+      SDLWindow(sdl, "SDLOpenGLTester", 0, 0, 640, 480,
+                SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN));
 
   /* Create OpenGL context */
-  sdl_gl_context = SDL_GL_CreateContext(window.get());
+  sdl_gl_context = window->GL_CreateContext();
 
   if (!sdl_gl_context) {
 #ifndef NO_EXCEPTIONS
-    spdlog::error("SDL_GL_CreateContext(): {}\n", SDL_GetError());
+    spdlog::error("SDL_GL_CreateContext(): {}", sdl->sdl_wrapper->GetError());
 #endif
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_GL_CreateContext(): %s\n",
-                 SDL_GetError());
+    // sdl->sdl_wrapper->LogError(SDL_LOG_CATEGORY_APPLICATION,
+    // "SDL_GL_CreateContext(): %s\n",
+    //              sdl->sdl_wrapper->GetError());
 #ifndef NO_EXCEPTIONS
     throw runtime_error("Error creating SDL_GL context");
 #else
@@ -154,17 +124,24 @@ int SDLOpenGLTester::rungl() {
 
   /* Important: call this *after* creating the context */
   if (LoadContext() < 0) {
-    SDL_Log("Could not load GL functions\n");
 #ifndef NO_EXCEPTIONS
+    spdlog::error("Could not load GL functions");
     throw runtime_error("Error loading GL functions");
 #else
+    sdl->sdl_wrapper->LogError(SDL_LOG_CATEGORY_APPLICATION,
+                               "Could not load GL functions\n");
     CHECK(false);
     return -1;
 #endif
   }
 
-  SDL_GetCurrentDisplayMode(0, &mode);
-  SDL_Log("Screen BPP    : %" SDL_PRIu32 "\n", SDL_BITSPERPIXEL(mode.format));
+  sdl->sdl_wrapper->GetCurrentDisplayMode(0, &mode);
+#ifndef NO_EXCEPTIONS
+  spdlog::info("Screen BPP    : %" SDL_PRIu32, SDL_BITSPERPIXEL(mode.format));
+#else
+  sdl->sdl_wrapper->Log("Screen BPP    : %" SDL_PRIu32, "\n",
+                        SDL_BITSPERPIXEL(mode.format));
+#endif
 
   LogSwapInterval();
 
@@ -180,27 +157,35 @@ int SDLOpenGLTester::rungl() {
   gl_context.glShadeModel(GL_SMOOTH);
 
   /* Main render loop */
-  // frames = 0;
-  then = SDL_GetTicks();
+  then = sdl->sdl_wrapper->GetTicks();
 
   return 0;
 }
 
 SDLOpenGLTester::~SDLOpenGLTester() {
+  if (sdl == nullptr) {
+    return;
+  }
+
   Uint32 now, frames = 0;
   /* Print out some timing information */
-  now = SDL_GetTicks();
+  now = sdl->sdl_wrapper->GetTicks();
   if (now > then) {
-    SDL_Log("%2.2f frames per second\n",
-            (static_cast<double>(frames) * 1000) / (now - then));
+#ifndef NO_EXCEPTIONS
+    spdlog::info("%2.2f frames per second",
+                 (static_cast<double>(frames) * 1000) / (now - then));
+#else
+    sdl->sdl_wrapper->Log("%2.2f frames per second\n",
+                          (static_cast<double>(frames) * 1000) / (now - then));
+#endif
   }
 
   if (sdl_gl_context) {
     /* SDL_GL_MakeCurrent(0, NULL); */ /* doesn't do anything */
-    SDL_GL_DeleteContext(sdl_gl_context);
+    sdl->sdl_wrapper->GL_DeleteContext(sdl_gl_context);
   }
 
-  SDL_Quit();
+  sdl->sdl_wrapper->Quit();
 }
 
 #include <gmock/gmock.h>

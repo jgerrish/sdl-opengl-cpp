@@ -4,7 +4,6 @@
 #define HAVE_OPENGL
 
 #include "SDL_opengl.h"
-#include "SDL_test_common.h"
 #include "opengl.h"
 #include "shader.h"
 #include "shader_test.h"

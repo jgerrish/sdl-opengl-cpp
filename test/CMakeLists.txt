@@ -13,7 +13,10 @@ set(TEST_MAIN "${PROJECT_NAME}-test")
 include_directories(include)
 
 add_executable(${TEST_MAIN}
+  src/sdl_test.cpp
   src/sdl_opengl_tester.cpp
+  src/sdl_opengl_test.cpp
+  src/sdl_window_test.cpp
   src/vertex_buffer_object_test.cpp
   src/vertex_array_object_test.cpp
   src/shader_test.cpp

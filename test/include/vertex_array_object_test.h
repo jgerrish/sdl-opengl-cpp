@@ -1,6 +1,8 @@
 #ifndef _SDL_OPENGL_CPP_VERTEX_ARRAY_OBJECT_TEST_H_
 #define _SDL_OPENGL_CPP_VERTEX_ARRAY_OBJECT_TEST_H_
 
+#include <optional>
+
 namespace sdl_opengl_cpp {
 
 class VertexArrayObjectTester {

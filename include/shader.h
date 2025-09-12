@@ -150,6 +150,11 @@ public:
   bool is_in_unspecified_state() override;
 
   // The OpenGL shader this class owns
+  // TODO: Make this a private variable
+  // to do that, we'll need to:
+  // Create a new AttachShader or attach_shader member function
+  // on Shader or Program
+  // Make Program a friend of Shader or Shader a friend of Program
   GLuint shader = 0;
 
 private:

@@ -1,8 +1,6 @@
 #ifndef _SDL_OPENGL_CPP_TEST_H_
 #define _SDL_OPENGL_CPP_TEST_H_
 
-// extern static int LoadContext(GL_Context *data);
-
 #include <memory>
 #include <optional>
 
@@ -10,6 +8,9 @@
 
 #include "SDL_opengl.h"
 #include <SDL.h>
+
+#include "sdl.h"
+#include "sdl_window.h"
 
 #include "opengl.h"
 
@@ -22,20 +23,9 @@ class SDLInitFailed : public runtime_error {
   using runtime_error::runtime_error;
 };
 
-// We use a custom deleter class for our SDL_Window smart pointer.
-class SDL_Window_Deleter {
-public:
-  void operator()(SDL_Window *window);
-
-private:
-  std::string log_start_del_msg{"Deleting SDL_Window"};
-  std::string log_end_del_msg{"Deleted SDL_Window"};
-};
-
 class SDLOpenGLTester {
 public:
-  SDLOpenGLTester();
-
+  SDLOpenGLTester(const std::shared_ptr<SDL> &sdl_);
   ~SDLOpenGLTester();
 
   // Explicitly delete the generated default copy constructor
@@ -49,6 +39,7 @@ public:
   SDLOpenGLTester &operator=(SDLOpenGLTester &&) = delete;
 
   int LoadContext();
+  void LogSwapInterval(void);
 
   int rungl();
 
@@ -56,7 +47,8 @@ public:
   GL_Context gl_context = {};
 
 private:
-  std::unique_ptr<SDL_Window, SDL_Window_Deleter> window = nullptr;
+  const std::shared_ptr<SDL> sdl = nullptr;
+  std::unique_ptr<sdl_opengl_cpp::sdl_window::SDLWindow> window = nullptr;
   Uint32 then = 0;
   SDL_GLContext sdl_gl_context = nullptr;
 };

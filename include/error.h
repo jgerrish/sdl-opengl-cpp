@@ -30,7 +30,14 @@ enum class error {
   // Program errors
   ProgramCreationError,
   ProgramLinkingError,
-  GetUniformLocationError
+  GetUniformLocationError,
+
+  // General SDL errors
+  SDLInitFailedError,
+
+  // SDL Window errors
+  SDLWindowCreationError
+
 };
 
 extern std::ostream &operator<<(std::ostream &os, const error &e);

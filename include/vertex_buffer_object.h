@@ -1,6 +1,7 @@
 #ifndef _SDL_OPENGL_CPP_VERTEX_BUFFER_OBJECT_H_
 #define _SDL_OPENGL_CPP_VERTEX_BUFFER_OBJECT_H_
 
+#include <functional>
 #include <memory>
 
 #include <stdexcept>
