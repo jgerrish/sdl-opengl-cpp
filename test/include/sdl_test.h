@@ -5,7 +5,7 @@
 #include <optional>
 
 #include "mock_opengl.h"
-#include "sdl.h"
+#include "sdl_base.h"
 #include "sdl_wrapper.h"
 
 namespace sdl_opengl_cpp {
