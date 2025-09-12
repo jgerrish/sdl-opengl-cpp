@@ -9,7 +9,7 @@
 #include "SDL_opengl.h"
 #include <SDL.h>
 
-#include "sdl.h"
+#include "sdl_base.h"
 #include "sdl_window.h"
 
 #include "opengl.h"

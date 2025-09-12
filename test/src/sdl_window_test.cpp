@@ -18,6 +18,7 @@ using testing::Assign;
 using testing::ByRef;
 using testing::SaveArg;
 using testing::SetArgPointee;
+using testing::StrEq;
 
 using namespace sdl_opengl_cpp;
 using namespace sdl_opengl_cpp::sdl_window;
@@ -47,7 +48,7 @@ TEST_CASE("testing that the SDLWindow constructor works with exceptions") {
   std::shared_ptr<SDL> sdl = std::make_shared<SDL>(mock_sdl_wrapper);
 
   EXPECT_CALL(*mock_sdl_wrapper,
-              CreateWindow("SDLWindowTester", 0, 0, 640, 480,
+              CreateWindow(StrEq("SDLWindowTester"), 0, 0, 640, 480,
                            SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN))
       .Times(1)
       // .Field(&MockSDL::initialized, testing::IsTrue())
@@ -83,7 +84,7 @@ TEST_CASE(
   std::shared_ptr<SDL> sdl = std::make_shared<SDL>(mock_sdl_wrapper);
 
   EXPECT_CALL(*mock_sdl_wrapper,
-              CreateWindow("SDLWindowTester", 0, 0, 640, 480,
+              CreateWindow(StrEq("SDLWindowTester"), 0, 0, 640, 480,
                            SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN))
       .Times(1)
       // SDL_Window is an opaque structure defined in SDL_Window in the
@@ -121,7 +122,7 @@ TEST_CASE("testing that the SDLWindow constructor throws an exception when "
   std::shared_ptr<SDL> sdl = std::make_shared<SDL>(mock_sdl_wrapper);
 
   EXPECT_CALL(*mock_sdl_wrapper,
-              CreateWindow("SDLWindowTester", 0, 0, 640, 480,
+              CreateWindow(StrEq("SDLWindowTester"), 0, 0, 640, 480,
                            SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN))
       .Times(1)
       .WillOnce(testing::Return(reinterpret_cast<SDL_Window *>(NULL)));
@@ -154,7 +155,7 @@ TEST_CASE("testing that the SDLWindow constructor sets an error when "
   std::shared_ptr<SDL> sdl = std::make_shared<SDL>(mock_sdl_wrapper);
 
   EXPECT_CALL(*mock_sdl_wrapper,
-              CreateWindow("SDLWindowTester", 0, 0, 640, 480,
+              CreateWindow(StrEq("SDLWindowTester"), 0, 0, 640, 480,
                            SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN))
       .Times(1)
       .WillOnce(testing::Return(reinterpret_cast<SDL_Window *>(NULL)));

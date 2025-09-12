@@ -10,7 +10,7 @@
 #define HAVE_OPENGL
 
 #include "gl_context.h"
-#include "sdl_opengl.h"
+#include "sdl_opengl_runner.h"
 
 using namespace sdl_opengl_cpp;
 using namespace sdl_opengl_cpp::sdl_opengl;

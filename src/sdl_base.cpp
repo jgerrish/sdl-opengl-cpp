@@ -10,7 +10,7 @@
 #include <SDL.h>
 
 #include "opengl.h"
-#include "sdl.h"
+#include "sdl_base.h"
 
 using namespace sdl_opengl_cpp;
 using namespace sdl_opengl_cpp::sdl;

@@ -7,7 +7,7 @@
 #include "gl_context.h"
 #include "mock_opengl.h"
 #include "mock_sdl.h"
-#include "sdl_opengl.h"
+#include "sdl_opengl_runner.h"
 #include "sdl_opengl_test.h"
 
 using ::testing::_;

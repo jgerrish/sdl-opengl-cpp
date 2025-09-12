@@ -9,3 +9,7 @@ build
 
 # Emacs backup files
 *~
+
+# Visual Studio and Windows CMake directories
+.vs
+builds

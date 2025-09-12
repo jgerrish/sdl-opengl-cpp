@@ -14,7 +14,7 @@
 #include <SDL.h>
 
 #include "opengl.h"
-#include "sdl.h"
+#include "sdl_base.h"
 #include "sdl_wrapper.h"
 
 #include "gl_context.h"

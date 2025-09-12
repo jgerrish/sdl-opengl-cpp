@@ -6,7 +6,7 @@
 #include "SDL_opengl.h"
 #include "mock_sdl.h"
 #include "opengl.h"
-#include "sdl.h"
+#include "sdl_base.h"
 #include "sdl_test.h"
 
 using ::testing::_;

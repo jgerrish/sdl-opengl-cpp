@@ -42,7 +42,7 @@
 #include "spdlog/spdlog.h"
 #endif
 
-#include "sdl.h"
+#include "sdl_base.h"
 #include "sdl_window.h"
 
 #include "gl_context.h"

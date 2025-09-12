@@ -14,7 +14,7 @@
 
 #include <stdexcept>
 
-#include "sdl.h"
+#include "sdl_base.h"
 
 using namespace std;
 

@@ -17,6 +17,9 @@
 
 #include "opengl.h"
 
+// Microsoft has as global CreateWindow define
+#undef CreateWindow
+
 using namespace std;
 
 namespace sdl_opengl_cpp {
