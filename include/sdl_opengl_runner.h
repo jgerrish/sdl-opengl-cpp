@@ -53,7 +53,22 @@ using namespace std;
 namespace sdl_opengl_cpp {
 
 // nested namespaces added in C++17
-namespace sdl_opengl {} // namespace sdl_opengl
+namespace sdl_opengl {
+
+#ifndef NO_EXCEPTIONS
+
+//! A LoadOpenGLContextError exception
+//!
+//! An error occurred trying to load an OpenGL Context
+//!
+class LoadOpenGLContextError : public runtime_error {
+  // Inherit constructors from runtime_error
+  using runtime_error::runtime_error;
+};
+
+#endif
+
+} // namespace sdl_opengl
 
 using namespace sdl_opengl;
 

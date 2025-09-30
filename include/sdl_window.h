@@ -44,6 +44,15 @@ class SDLWindowCreationError : public runtime_error {
   using runtime_error::runtime_error;
 };
 
+//! A CreateOpenGLContextError exception
+//!
+//! An error occurred trying to create an OpenGL Context
+//!
+class CreateOpenGLContextError : public runtime_error {
+  // Inherit constructors from runtime_error
+  using runtime_error::runtime_error;
+};
+
 //! A SDLWindowUnspecifiedStateError exception
 //!
 //! This exception is thrown when the SDLWindow is in an

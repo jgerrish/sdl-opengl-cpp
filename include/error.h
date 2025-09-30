@@ -34,9 +34,11 @@ enum class error {
 
   // General SDL errors
   SDLInitFailedError,
+  SDLLoadOpenGLContext,
 
   // SDL Window errors
-  SDLWindowCreationError
+  SDLWindowCreationError,
+  SDLWindowCreateOpenGLContext
 
 };
 

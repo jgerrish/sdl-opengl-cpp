@@ -5,8 +5,6 @@
 #include "spdlog/spdlog.h"
 #endif
 
-#include <doctest/doctest.h>
-
 #define HAVE_OPENGL
 
 #include "gl_context.h"
@@ -23,7 +21,8 @@ SDLOpenGL::SDLOpenGL(const std::shared_ptr<SDL> &sdl_) : sdl{sdl_} {
 #ifndef NO_EXCEPTIONS
     throw SDLInitFailedError("ERROR::SDL_OPENGL::SDL_INIT_FAILED");
 #else
-    CHECK(false);
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::SDLInitFailedError));
     return;
 #endif
   }
@@ -88,11 +87,12 @@ int SDLOpenGL::rungl() {
   if (!sdl_gl_context) {
 #ifndef NO_EXCEPTIONS
     spdlog::error("SDL_GL_CreateContext(): {}", sdl->GetError());
-    throw runtime_error("Error creating SDL_GL context");
+    throw sdl_window::CreateOpenGLContextError("Error creating SDL_GL context");
 #else
     sdl->LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_GL_CreateContext(): {}",
                   sdl->GetError());
-    CHECK(false);
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::SDLWindowCreateOpenGLContext));
     return -1;
 #endif
   }
@@ -101,10 +101,11 @@ int SDLOpenGL::rungl() {
   if (load_context() < 0) {
 #ifndef NO_EXCEPTIONS
     spdlog::error("Could not load GL functions");
-    throw runtime_error("Error loading GL functions");
+    throw sdl_opengl::LoadOpenGLContextError("Error loading GL functions");
 #else
     sdl->Log("Could not load GL functions\n");
-    CHECK(false);
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::SDLLoadOpenGLContext));
     return -1;
 #endif
   }
