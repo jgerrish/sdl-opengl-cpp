@@ -38,6 +38,17 @@ SDL::SDL(const std::shared_ptr<SDLWrapper> &sdl_wrapper_, Uint32 flags)
 }
 
 void SDL::build(Uint32 flags) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return;
+#endif
+  }
+
   int res = sdl_wrapper->Init(flags);
 
   if (res < 0) {
@@ -103,9 +114,33 @@ SDL &SDL::operator=(SDL &&s) noexcept {
   return *this;
 }
 
-const char *SDL::GetError(void) { return sdl_wrapper->GetError(); }
+const char *SDL::GetError(void) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return nullptr;
+#endif
+  }
+
+  return sdl_wrapper->GetError();
+}
 
 int SDL::SetError(SDL_PRINTF_FORMAT_STRING const char *fmt, ...) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return -1;
+#endif
+  }
+
   va_list args;
 
   va_start(args, fmt);
@@ -116,6 +151,17 @@ int SDL::SetError(SDL_PRINTF_FORMAT_STRING const char *fmt, ...) {
 }
 
 void SDL::Log(SDL_PRINTF_FORMAT_STRING const char *fmt, ...) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return;
+#endif
+  }
+
   va_list args;
 
   va_start(args, fmt);
@@ -124,6 +170,17 @@ void SDL::Log(SDL_PRINTF_FORMAT_STRING const char *fmt, ...) {
 }
 
 void SDL::LogInfo(int category, SDL_PRINTF_FORMAT_STRING const char *fmt, ...) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return;
+#endif
+  }
+
   va_list args;
 
   va_start(args, fmt);
@@ -133,6 +190,17 @@ void SDL::LogInfo(int category, SDL_PRINTF_FORMAT_STRING const char *fmt, ...) {
 
 void SDL::LogError(int category, SDL_PRINTF_FORMAT_STRING const char *fmt,
                    ...) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return;
+#endif
+  }
+
   va_list args;
 
   va_start(args, fmt);
@@ -141,41 +209,153 @@ void SDL::LogError(int category, SDL_PRINTF_FORMAT_STRING const char *fmt,
 }
 
 void SDL::LogSetPriority(int category, SDL_LogPriority priority) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return;
+#endif
+  }
+
   return sdl_wrapper->LogSetPriority(category, priority);
 }
 
 SDL_Window *SDL::CreateWindow(const char *title, int x, int y, int w, int h,
                               Uint32 flags) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return nullptr;
+#endif
+  }
+
   return sdl_wrapper->CreateWindow(title, x, y, w, h, flags);
 }
 
 void SDL::DestroyWindow(SDL_Window *window) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return;
+#endif
+  }
+
   return sdl_wrapper->DestroyWindow(window);
 }
 
 SDL_GLContext SDL::GL_CreateContext(SDL_Window *window) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return nullptr;
+#endif
+  }
+
   return sdl_wrapper->GL_CreateContext(window);
 }
 
 void SDL::GL_DeleteContext(SDL_GLContext context) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return;
+#endif
+  }
+
   return sdl_wrapper->GL_DeleteContext(context);
 }
 
 int SDL::GL_MakeCurrent(SDL_Window *window, SDL_GLContext context) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return -1;
+#endif
+  }
+
   return sdl_wrapper->GL_MakeCurrent(window, context);
 }
 
 void SDL::GL_GetDrawableSize(SDL_Window *window, int *w, int *h) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return;
+#endif
+  }
+
   return sdl_wrapper->GL_GetDrawableSize(window, w, h);
 }
 
 void SDL::GL_SwapWindow(SDL_Window *window) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return;
+#endif
+  }
+
   return sdl_wrapper->GL_SwapWindow(window);
 }
 
-int SDL::GL_GetSwapInterval(void) { return sdl_wrapper->GL_GetSwapInterval(); }
+int SDL::GL_GetSwapInterval(void) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return 0;
+#endif
+  }
+
+  return sdl_wrapper->GL_GetSwapInterval();
+}
 
 int SDL::GetCurrentDisplayMode(int displayIndex, SDL_DisplayMode *mode) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError(
+        "SDL Object is in an unspecified state");
+#else
+    last_operation_failed = true;
+    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    return -1;
+#endif
+  }
+
   return sdl_wrapper->GetCurrentDisplayMode(displayIndex, mode);
 }
 
