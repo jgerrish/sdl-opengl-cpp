@@ -21,8 +21,7 @@ SDLOpenGL::SDLOpenGL(const std::shared_ptr<SDL> &sdl_) : sdl{sdl_} {
 #ifndef NO_EXCEPTIONS
     throw SDLInitFailedError("ERROR::SDL_OPENGL::SDL_INIT_FAILED");
 #else
-    set_error(
-        std::optional<error>(sdl_opengl_cpp::error::SDLInitFailedError));
+    set_error(std::optional<error>(sdl_opengl_cpp::error::SDLInitFailedError));
     return;
 #endif
   }
@@ -91,8 +90,8 @@ int SDLOpenGL::rungl() {
 #else
     sdl->LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL_GL_CreateContext(): {}",
                   sdl->GetError());
-    set_error(
-        std::optional<error>(sdl_opengl_cpp::error::SDLWindowCreateOpenGLContext));
+    set_error(std::optional<error>(
+        sdl_opengl_cpp::error::SDLWindowCreateOpenGLContext));
     return -1;
 #endif
   }
@@ -200,7 +199,7 @@ SDLOpenGL &SDLOpenGL::operator=(SDLOpenGL &&sgl) noexcept {
   return *this;
 }
 
-bool SDLOpenGL::is_in_unspecified_state() {
+bool SDLOpenGL::is_in_unspecified_state() const {
   if ((sdl_gl_context == nullptr) || (window == 0))
     return true;
   else

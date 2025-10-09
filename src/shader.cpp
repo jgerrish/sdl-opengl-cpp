@@ -14,8 +14,7 @@ Shader::Shader(const string &name, const std::shared_ptr<GLContext> &ctx,
     spdlog::error("ERROR::SHADER::CREATE_SHADER_FAILED::{}", name);
     throw ShaderCreationError("ERROR::SHADER::CREATE_SHADER_FAILED");
 #else
-    last_operation_failed = true;
-    last_error.emplace(error::ShaderCreationError);
+    set_error(std::optional<error>(error::ShaderCreationError));
     cleanup();
     return;
 #endif
@@ -96,8 +95,8 @@ void Shader::compile(const string &src) {
 #ifndef NO_EXCEPTIONS
     throw ShaderUnspecifiedStateError("Shader is in an unspecified state");
 #else
-    last_operation_failed = true;
-    last_error.emplace(error::UnspecifiedStateError);
+    set_error(
+        std::optional<sdl_opengl_cpp::error>(error::UnspecifiedStateError));
     cleanup();
     return;
 #endif
@@ -157,8 +156,8 @@ void Shader::compile(const string &src) {
 #ifndef NO_EXCEPTIONS
     throw ShaderCompilationError("ERROR::SHADER::COMPILATION_FAILED");
 #else
-    last_operation_failed = true;
-    last_error.emplace(error::ShaderCompilationError);
+    set_error(
+        std::optional<sdl_opengl_cpp::error>(error::ShaderCompilationError));
     cleanup();
     return;
 #endif
@@ -170,7 +169,7 @@ void Shader::compile(const string &src) {
 GLuint Shader::openGLName() { return shader; }
 
 // Implement checking for an unspecified state
-bool Shader::is_in_unspecified_state() {
+bool Shader::is_in_unspecified_state() const {
   if ((gl_context == nullptr) || (shader == 0))
     return true;
   else

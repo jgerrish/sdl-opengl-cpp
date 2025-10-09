@@ -14,8 +14,7 @@ Program::Program(const string &program_name,
     spdlog::error("ERROR::SHADER::PROGRAM::CREATE_PROGRAM_FAILED::{}", name);
     throw ProgramCreationError("ERROR::SHADER::PROGRAM::CREATE_PROGRAM_FAILED");
 #else
-    last_operation_failed = true;
-    last_error.emplace(error::ProgramCreationError);
+    set_error(std::optional<error>(error::ProgramCreationError));
     cleanup();
     return;
 #endif
@@ -32,8 +31,8 @@ Program::Program(const string &program_name,
     spdlog::error("ERROR::SHADER::PROGRAM::CREATE_PROGRAM_FAILED::{}", name);
     throw ProgramCreationError("ERROR::SHADER::PROGRAM::CREATE_PROGRAM_FAILED");
 #else
-    last_operation_failed = true;
-    last_error.emplace(error::ProgramCreationError);
+    set_error(
+        std::optional<sdl_opengl_cpp::error>(error::ProgramCreationError));
     cleanup();
     return;
 #endif
@@ -108,8 +107,8 @@ void Program::link() {
 #ifndef NO_EXCEPTIONS
     throw ProgramUnspecifiedStateError("Program is in an unspecified state");
 #else
-    last_operation_failed = true;
-    last_error.emplace(error::UnspecifiedStateError);
+    set_error(
+        std::optional<sdl_opengl_cpp::error>(error::UnspecifiedStateError));
     cleanup();
     return;
 #endif
@@ -147,8 +146,7 @@ void Program::link() {
 #ifndef NO_EXCEPTIONS
     throw ProgramLinkingError("ERROR::SHADER::PROGRAM::LINKING_FAILED");
 #else
-    last_operation_failed = true;
-    last_error.emplace(error::ProgramLinkingError);
+    set_error(std::optional<sdl_opengl_cpp::error>(error::ProgramLinkingError));
     cleanup();
     return;
 #endif
@@ -162,8 +160,7 @@ GLuint Program::use() {
 #ifndef NO_EXCEPTIONS
     throw ProgramUnspecifiedStateError("Program is in an unspecified state");
 #else
-    last_operation_failed = true;
-    last_error.emplace(error::UnspecifiedStateError);
+    set_error(std::optional<error>(error::UnspecifiedStateError));
     cleanup();
     return 0;
 #endif
@@ -183,8 +180,7 @@ GLuint Program::use(GLuint program_name) {
 #ifndef NO_EXCEPTIONS
     throw ProgramUnspecifiedStateError("Program is in an unspecified state");
 #else
-    last_operation_failed = true;
-    last_error.emplace(error::UnspecifiedStateError);
+    set_error(std::optional<error>(error::UnspecifiedStateError));
     cleanup();
     return 0;
 #endif
@@ -205,8 +201,7 @@ GLint Program::getUniformLocation(const std::string &uniform_name_to_get) {
 #ifndef NO_EXCEPTIONS
     throw ProgramUnspecifiedStateError("Program is in an unspecified state");
 #else
-    last_operation_failed = true;
-    last_error.emplace(error::UnspecifiedStateError);
+    set_error(std::optional<error>(error::UnspecifiedStateError));
     cleanup();
     return -1;
 #endif
@@ -219,8 +214,7 @@ GLint Program::getUniformLocation(const std::string &uniform_name_to_get) {
 #ifndef NO_EXCEPTIONS
     throw GetUniformLocationError("Couldn't get location of uniform");
 #else
-    last_operation_failed = true;
-    last_error.emplace(error::GetUniformLocationError);
+    set_error(std::optional<error>(error::GetUniformLocationError));
     cleanup();
     return -1;
 #endif
@@ -230,7 +224,7 @@ GLint Program::getUniformLocation(const std::string &uniform_name_to_get) {
 }
 
 // Implement checking for an unspecified state
-bool Program::is_in_unspecified_state() {
+bool Program::is_in_unspecified_state() const {
   if ((gl_context == nullptr) || (program == 0))
     return true;
   else

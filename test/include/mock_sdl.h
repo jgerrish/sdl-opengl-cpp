@@ -23,9 +23,9 @@ namespace sdl_opengl_cpp {
 
 class MockSDLWrapper : public SDLWrapper {
 public:
-  MockSDLWrapper() : SDLWrapper() { }
+  MockSDLWrapper() : SDLWrapper() {}
 
-  MockSDLWrapper(Uint32 flags) : SDLWrapper(flags) { }
+  MockSDLWrapper(Uint32 flags) : SDLWrapper(flags) {}
 
   ~MockSDLWrapper(){};
 

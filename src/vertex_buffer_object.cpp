@@ -165,7 +165,7 @@ VertexBufferObject::operator=(VertexBufferObject &&vbo) noexcept {
 }
 
 // Implement checking for an unspecified state
-bool VertexBufferObject::is_in_unspecified_state() {
+bool VertexBufferObject::is_in_unspecified_state() const {
   if ((gl_context == nullptr) || (VBO == 0))
     return true;
   else

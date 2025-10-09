@@ -17,7 +17,7 @@ public:
   //! \return true if the object is in a "valid but unspecifed state"
   //!         false if the object is in a valid state and can be used.
   //!
-  virtual bool is_in_unspecified_state() = 0;
+  virtual bool is_in_unspecified_state() const = 0;
 };
 
 } // namespace sdl_opengl_cpp

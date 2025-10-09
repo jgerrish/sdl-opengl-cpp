@@ -51,13 +51,13 @@ public:
   //!        - `SDL_INIT_EVENTS`: events subsystem
   //!        - `SDL_INIT_EVERYTHING`: all of the above subsystems
   //!        - `SDL_INIT_NOPARACHUTE`: compatibility; this flag is ignored
-  //! 
+  //!
   //! \returns 0 on success or a negative error code on failure.
   virtual int Init(Uint32 flags);
 
   //! Clean up all the initiaized SDL subsystems.
   //!
-  //! 
+  //!
   virtual void Quit(void);
 
   //! Get a message about the last error that occurred on the current

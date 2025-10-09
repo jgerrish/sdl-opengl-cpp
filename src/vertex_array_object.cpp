@@ -33,8 +33,8 @@ VertexArrayObject::VertexArrayObject(const string &array_name,
 #ifndef NO_EXCEPTIONS
     throw GenVertexArraysError("ERROR::VERTEX_ARRAY::GEN_VERTEX_ARRAYS_FAILED");
 #else
-    last_operation_failed = true;
-    last_error.emplace(sdl_opengl_cpp::error::GenVertexArraysError);
+    set_error(
+        std::optional<sdl_opengl_cpp::error>(error::GenVertexArraysError));
     cleanup();
     return;
 #endif
@@ -49,8 +49,8 @@ VertexArrayObject::VertexArrayObject(const string &array_name,
     throw vertex_array_object::InvalidOperationError(
         "ERROR::VERTEX_ARRAY::INVALID_OPERATION_ERROR");
 #else
-    last_operation_failed = true;
-    last_error.emplace(sdl_opengl_cpp::error::InvalidOperationError);
+    set_error(
+        std::optional<sdl_opengl_cpp::error>(error::InvalidOperationError));
     cleanup();
     return;
 #endif
@@ -69,8 +69,8 @@ VertexArrayObject::VertexArrayObject(const string &array_name,
     throw vertex_array_object::InvalidOperationError(
         "ERROR::VERTEX_ARRAY::INVALID_OPERATION_ERROR");
 #else
-    last_operation_failed = true;
-    last_error.emplace(sdl_opengl_cpp::error::InvalidOperationError);
+    set_error(
+        std::optional<sdl_opengl_cpp::error>(error::InvalidOperationError));
     cleanup();
     return;
 #endif
@@ -144,8 +144,8 @@ void VertexArrayObject::bind() {
     throw VertexArrayObjectUnspecifiedStateError(
         "Vertex Array Object is in an unspecified state");
 #else
-    last_operation_failed = true;
-    last_error.emplace(sdl_opengl_cpp::error::UnspecifiedStateError);
+    set_error(
+        std::optional<sdl_opengl_cpp::error>(error::UnspecifiedStateError));
     return;
 #endif
   }
@@ -159,7 +159,7 @@ void VertexArrayObject::bind() {
 }
 
 // Implement checking for an unspecified state
-bool VertexArrayObject::is_in_unspecified_state() {
+bool VertexArrayObject::is_in_unspecified_state() const {
   if ((gl_context == nullptr) || (VAO == 0))
     return true;
   else

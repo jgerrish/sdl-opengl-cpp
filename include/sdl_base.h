@@ -313,7 +313,7 @@ public:
   //! so cleanup() is called from multiple points.
   void cleanup() noexcept;
 
-  bool is_in_unspecified_state() override;
+  bool is_in_unspecified_state() const override;
 
 private:
   //! An object that holds pointers to the underlying SDL functions

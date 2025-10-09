@@ -135,7 +135,7 @@ public:
 
   GLint getUniformLocation(const std::string &uniform_name_to_get);
 
-  bool is_in_unspecified_state() override;
+  bool is_in_unspecified_state() const override;
 
 private:
   //! The Program name

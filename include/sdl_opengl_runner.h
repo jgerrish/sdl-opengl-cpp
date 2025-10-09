@@ -141,7 +141,7 @@ public:
   //!
   //! \returns true if the instance is in an unspecified state, false
   //! if it isn't
-  bool is_in_unspecified_state() override;
+  bool is_in_unspecified_state() const override;
 
 public:
   //! GLContext is a basic wrapper around the SDL GL_Context

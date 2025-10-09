@@ -126,7 +126,7 @@ public:
   DECLSPEC void SDLCALL GL_SwapWindow();
 
   //! True if the the object is in an unspecified state
-  bool is_in_unspecified_state() override;
+  bool is_in_unspecified_state() const override;
 
 private:
   //! The underlying SDL object for this window

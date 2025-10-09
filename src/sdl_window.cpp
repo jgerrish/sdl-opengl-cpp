@@ -18,8 +18,8 @@ SDLWindow::SDLWindow(const std::shared_ptr<SDL> &sdl_, const char *title, int x,
     spdlog::error("ERROR::SDL_WINDOW::CREATE_SDL_WINDOW_FAILED");
     throw SDLWindowCreationError("ERROR::SDL_WINDOW::CREATE_SDL_WINDOW_FAILED");
 #else
-    last_operation_failed = true;
-    last_error.emplace(sdl_opengl_cpp::error::SDLWindowCreationError);
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::SDLWindowCreationError));
     cleanup();
     return;
 #endif
@@ -65,7 +65,7 @@ SDLWindow &SDLWindow::operator=(SDLWindow &&w) noexcept {
   return *this;
 }
 
-bool SDLWindow::is_in_unspecified_state() {
+bool SDLWindow::is_in_unspecified_state() const {
   if ((sdl == nullptr) || (window == nullptr))
     return true;
   else

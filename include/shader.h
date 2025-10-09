@@ -147,7 +147,7 @@ public:
 
   GLuint openGLName();
 
-  bool is_in_unspecified_state() override;
+  bool is_in_unspecified_state() const override;
 
   // The OpenGL shader this class owns
   // TODO: Make this a private variable

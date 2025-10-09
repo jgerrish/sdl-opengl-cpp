@@ -124,7 +124,7 @@ public:
   // move assignment operator
   VertexArrayObject &operator=(VertexArrayObject &&) noexcept;
 
-  bool is_in_unspecified_state() override;
+  bool is_in_unspecified_state() const override;
 
   void bind();
 

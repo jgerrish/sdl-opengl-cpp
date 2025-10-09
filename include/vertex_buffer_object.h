@@ -175,7 +175,7 @@ public:
   // move assignment operator
   VertexBufferObject &operator=(VertexBufferObject &&) noexcept;
 
-  bool is_in_unspecified_state() override;
+  bool is_in_unspecified_state() const override;
 
   void bind();
 
