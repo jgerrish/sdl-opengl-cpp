@@ -6,6 +6,12 @@
 
 using namespace sdl_opengl_cpp;
 
+void GLContext::glPushAttrib(GLbitfield mask) {
+  return gl_context->glPushAttrib(mask);
+}
+
+void GLContext::glPopAttrib() { return gl_context->glPopAttrib(); }
+
 void GLContext::glClear(GLbitfield mask) { return gl_context->glClear(mask); }
 
 GLenum GLContext::glGetError() { return gl_context->glGetError(); }
@@ -159,6 +165,8 @@ void GLContext::glOrtho(GLdouble left, GLdouble right, GLdouble bottom,
 
 void GLContext::glEnable(GLenum cap) { return gl_context->glEnable(cap); }
 
+void GLContext::glDisable(GLenum cap) { return gl_context->glDisable(cap); }
+
 void GLContext::glDepthFunc(GLenum func) {
   return gl_context->glDepthFunc(func);
 }
@@ -174,6 +182,55 @@ void GLContext::glClearColor(GLclampf r, GLclampf g, GLclampf b, GLclampf a) {
 void GLContext::glColor3fv(const GLfloat *color) {
   return gl_context->glColor3fv(color);
 }
+
+// Drawing Functions
+
+void GLContext::glEnd() { return gl_context->glEnd(); }
+
+void GLContext::glBegin(GLenum mode) { return gl_context->glBegin(mode); }
+
+void GLContext::glTexCoord2f(GLfloat s, GLfloat t) {
+  return gl_context->glTexCoord2f(s, t);
+}
+
+// Miscellaneous
+
+void GLContext::glBlendFunc(GLenum sfactor, GLenum dfactor) {
+  return gl_context->glBlendFunc(sfactor, dfactor);
+}
+
+// Texture mapping
+
+void GLContext::glTexEnvf(GLenum target, GLenum pname, GLfloat param) {
+  return gl_context->glTexEnvf(target, pname, param);
+}
+
+void GLContext::glTexParameteri(GLenum target, GLenum pname, GLint param) {
+  return gl_context->glTexParameteri(target, pname, param);
+}
+
+void GLContext::glTexImage2D(GLenum target, GLint level, GLint internalFormat,
+                             GLsizei width, GLsizei height, GLint border,
+                             GLenum format, GLenum type, const GLvoid *pixels) {
+  return gl_context->glTexImage2D(target, level, internalFormat, width, height,
+                                  border, format, type, pixels);
+}
+
+// 1.1 functions
+
+void GLContext::glGenTextures(GLsizei n, GLuint *textures) {
+  return gl_context->glGenTextures(n, textures);
+}
+
+void GLContext::glBindTexture(GLenum target, GLuint texture) {
+  return gl_context->glBindTexture(target, texture);
+}
+
+// Transformation
+
+void GLContext::glPushMatrix() { return gl_context->glPushMatrix(); }
+
+void GLContext::glPopMatrix() { return gl_context->glPopMatrix(); }
 
 void GLContext::glViewport(GLint x, GLint y, GLsizei width, GLsizei height) {
   return gl_context->glViewport(x, y, width, height);

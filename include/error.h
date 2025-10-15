@@ -38,7 +38,11 @@ enum class error {
 
   // SDL Window errors
   SDLWindowCreationError,
-  SDLWindowCreateOpenGLContext
+  SDLWindowCreateOpenGLContext,
+
+  // SDL Surface errors
+  SDLSurfaceCreationError,
+  SDLSurfaceLoadTextureError
 
 };
 

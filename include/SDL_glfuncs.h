@@ -57,7 +57,10 @@ SDL_PROC_UNUSED(void, glBitmap,
                 (GLsizei, GLsizei, GLfloat, GLfloat, GLfloat, GLfloat,
                  const GLubyte *))
 SDL_PROC(void, glBlendEquation, (GLenum))
-SDL_PROC_UNUSED(void, glBlendFunc, (GLenum, GLenum))
+
+// Added by JMG 2025-09-19
+SDL_PROC(void, glBlendFunc, (GLenum, GLenum))
+
 SDL_PROC(void, glBlendFuncSeparate, (GLenum, GLenum, GLenum, GLenum))
 
 // Added by JMG 2025-03-16
@@ -394,15 +397,27 @@ SDL_PROC(void, glPointSize, (GLfloat size))
 SDL_PROC_UNUSED(void, glPolygonMode, (GLenum face, GLenum mode))
 SDL_PROC_UNUSED(void, glPolygonOffset, (GLfloat factor, GLfloat units))
 SDL_PROC_UNUSED(void, glPolygonStipple, (const GLubyte *mask))
-SDL_PROC_UNUSED(void, glPopAttrib, (void))
+
+// Added by JMG 2025-09-19
+SDL_PROC(void, glPopAttrib, (void))
+
 SDL_PROC_UNUSED(void, glPopClientAttrib, (void))
-SDL_PROC_UNUSED(void, glPopMatrix, (void))
+
+// Added by JMG 2025-09-19
+SDL_PROC(void, glPopMatrix, (void))
+
 SDL_PROC_UNUSED(void, glPopName, (void))
 SDL_PROC_UNUSED(void, glPrioritizeTextures,
                 (GLsizei n, const GLuint *textures, const GLclampf *priorities))
-SDL_PROC_UNUSED(void, glPushAttrib, (GLbitfield mask))
+
+// Added by JMG 2025-09-19
+SDL_PROC(void, glPushAttrib, (GLbitfield mask))
+
 SDL_PROC_UNUSED(void, glPushClientAttrib, (GLbitfield mask))
-SDL_PROC_UNUSED(void, glPushMatrix, (void))
+
+// Added by JMG 2025-09-19
+SDL_PROC(void, glPushMatrix, (void))
+
 SDL_PROC_UNUSED(void, glPushName, (GLuint name))
 SDL_PROC_UNUSED(void, glRasterPos2d, (GLdouble x, GLdouble y))
 SDL_PROC_UNUSED(void, glRasterPos2dv, (const GLdouble *v))

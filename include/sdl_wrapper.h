@@ -1,3 +1,32 @@
+// Some of this documentation is copied from the SDL documentation
+//
+// This project, sdl-opengl-cpp, is license under the MIT License
+// Copyright (c) 2025 Joshua Gerrish.
+//
+// The SDL license is included below for reference to the copied
+// documentation.
+//
+// The copyright of that from the LICENSE.txt file as of 2025-10-08 is
+// copied below:
+//
+// Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
+//
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented; you must not
+//    claim that you wrote the original software. If you use this software
+//    in a product, an acknowledgment in the product documentation would be
+//    appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+//    misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+
 #ifndef _SDL_OPENGL_CPP_SDL_WRAPPER_H_
 #define _SDL_OPENGL_CPP_SDL_WRAPPER_H_
 
@@ -197,6 +226,163 @@ public:
   //! \returns an unsigned 32-bit value indiating the number of
   //!          milliseconds since the SDL library was initialized
   virtual Uint32 GetTicks(void);
+
+  // SDL Surface functions
+
+  //! Set an additional color value multiplied into blit operations
+  //!
+  //! When this surface is blitted, during the blit operation each source color
+  //! channel is modulated by the appropriate color value according to the
+  //! following formula:
+  //!
+  //! `srcC = srcC * (color / 255)`
+  //!
+  //! \param surface the SDL_Surface structure to update.
+  //! \param r the red color value multiplied into blit operations.
+  //! \param g the green color value multiplied into blit operations.
+  //! \param b the blue color value multiplied into blit operations.
+  //! \returns 0 on success or a negative error code on failure; call
+  //!          SDL_GetError() for more information.
+  //!
+  //! Documentation copied from SDL_surface.h branch release-2.32.x on
+  //! 2025-10-08
+  virtual int SetSurfaceColorMod(SDL_Surface *surface, Uint8 r, Uint8 g,
+                                 Uint8 b);
+
+  //! Get the additional color value multiplied into blit operations.
+  //!
+  //! \param surface the SDL_Surface structure to query.
+  //! \param r a pointer filled in with the current red color value.
+  //! \param g a pointer filled in with the current green color value.
+  //! \param b a pointer filled in with the current blue color value.
+  //! \returns 0 on success or a negative error code on failure; call
+  //!          SDL_GetError() for more information.
+  //!
+  //! Documentation copied from SDL_surface.h branch release-2.32.x on
+  //! 2025-10-08
+  virtual int GetSurfaceColorMod(SDL_Surface *surface, Uint8 *r, Uint8 *g,
+                                 Uint8 *b);
+
+  //! Set an additional alpha value used in blit operations.
+  //!
+  //! When this surface is blitted, during the blit operation the source alpha
+  //! value is modulated by this alpha value according to the following formula:
+  //!
+  //! `srcA = srcA * (alpha / 255)`
+  //!
+  //! \param surface the SDL_Surface structure to update.
+  //! \param alpha the alpha value multiplied into blit operations.
+  //! \returns 0 on success or a negative error code on failure; call
+  //!          SDL_GetError() for more information.
+  //!
+  //! Documentation copied from SDL_surface.h branch release-2.32.x on
+  //! 2025-10-08
+  virtual int SetSurfaceAlphaMod(SDL_Surface *surface, Uint8 alpha);
+
+  //! Get the additional alpha value used in blit operations.
+  //!
+  //! \param surface the SDL_Surface structure to query.
+  //! \param alpha a pointer filled in with the current alpha value.
+  //! \returns 0 on success or a negative error code on failure; call
+  //!          SDL_GetError() for more information.
+  //!
+  //! Documentation copied from SDL_surface.h branch release-2.32.x on
+  //! 2025-10-08
+  virtual int GetSurfaceAlphaMod(SDL_Surface *surface, Uint8 *alpha);
+
+  //! Set the blend mode used for blit operations.
+  //!
+  //! To copy a surface to another surface (or texture) without blending with
+  //! the existing data, the blendmode of the SOURCE surface should be set to
+  //! `SDL_BLENDMODE_NONE`.
+  //!
+  //! \param surface the SDL_Surface structure to update.
+  //! \param blendMode the SDL_BlendMode to use for blit blending.
+  //! \returns 0 on success or a negative error code on failure; call
+  //!          SDL_GetError() for more information.
+  //!
+  //! Documentation copied from SDL_surface.h branch release-2.32.x on
+  //! 2025-10-08
+  virtual int SetSurfaceBlendMode(SDL_Surface *surface,
+                                  SDL_BlendMode blendMode);
+
+  //! Get the blend mode used for blit operations.
+  //!
+  //! \param surface the SDL_Surface structure to query.
+  //! \param blendMode a pointer filled in with the current SDL_BlendMode.
+  //! \returns 0 on success or a negative error code on failure; call
+  //!          SDL_GetError() for more information.
+  //!
+  //! Documentation copied from SDL_surface.h branch release-2.32.x on
+  //! 2025-10-08
+  virtual int GetSurfaceBlendMode(SDL_Surface *surface,
+                                  SDL_BlendMode *blendMode);
+
+  //! Allocate a new RGB surface with a specific pixel format.
+  //!
+  //! This function operates mostly like SDL_CreateRGBSurface(),
+  //! except instead of providing pixel color masks, you provide it
+  //! with a predefined format from SDL_PixelFormatEnum.
+  //!
+  //! \param flags the flags are unused and should be set to 0.
+  //! \param width the width of the surface.
+  //! \param height the height of the surface.
+  //! \param depth the depth of the surface in bits.
+  //! \param format the SDL_PixelFormatEnum for the new surface's pixel format.
+  //! \returns the new SDL_Surface structure that is created or NULL if it
+  //! fails;
+  //!          call SDL_GetError() for more information.
+  //!
+  //! Documentation copied from SDL_surface.h branch release-2.32.x on
+  //! 2025-10-08
+  virtual SDL_Surface *CreateRGBSurfaceWithFormat(Uint32 flags, int width,
+                                                  int height, int depth,
+                                                  Uint32 format);
+
+  //! Free an RGB surface.
+  //!
+  //! It is safe to pass NULL to this function.
+  //!
+  //! \param surface the SDL_Surface to free.
+  //!
+  //! Documentation copied from SDL_surface.h branch release-2.32.x on
+  //! 2025-10-08
+  virtual void FreeSurface(SDL_Surface *surface);
+
+  //! Perform a fast blit from the source surface to the destination surface.
+  //!
+  //! SDL_UpperBlit() has been replaced by SDL_BlitSurface(), which is merely a
+  //! macro for this function with a less confusing name.
+  //!
+  //! \param src the SDL_Surface structure to be copied from.
+  //! \param srcrect the SDL_Rect structure representing the rectangle to be
+  //!                copied, or NULL to copy the entire surface.
+  //! \param dst the SDL_Surface structure that is the blit target.
+  //! \param dstrect the SDL_Rect structure representing the rectangle that is
+  //!                copied into.
+  //!
+  //! Documentation copied from SDL_surface.h branch release-2.32.x on
+  //! 2025-10-08
+  virtual int BlitSurface(SDL_Surface *src, const SDL_Rect *srcrect,
+                          SDL_Surface *dst, SDL_Rect *dstrect);
+
+  //! Save a surface to a seekable SDL data stream in BMP format.
+  //!
+  //! Surfaces with a 24-bit, 32-bit and paletted 8-bit format get saved in the
+  //! BMP directly. Other RGB formats with 8-bit or higher get converted to a
+  //! 24-bit surface or, if they have an alpha mask or a colorkey, to a 32-bit
+  //! surface before they are saved. YUV and paletted 1-bit and 4-bit formats
+  //! are not supported.
+  //!
+  //! \param surface the SDL_Surface structure containing the image to be saved.
+  //! \param filename the name of the file to save to
+  //!
+  //! \returns 0 on success or a negative error code on failure; call
+  //!          SDL_GetError() for more information.
+  //!
+  //! Documentation copied from SDL_surface.h branch release-2.32.x on
+  //! 2025-10-08
+  virtual int SaveBMP(SDL_Surface *surface, const string &filename);
 };
 
 } // namespace sdl_opengl_cpp

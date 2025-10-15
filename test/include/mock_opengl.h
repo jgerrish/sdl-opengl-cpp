@@ -28,7 +28,36 @@ public:
   ~MockOpenGLContext(){};
 
   // General functions
+
+  MOCK_METHOD(void, glPushAttrib, (GLbitfield mask), (override));
+  MOCK_METHOD(void, glPopAttrib, (), (override));
+
   MOCK_METHOD(GLenum, glGetError, (), (override));
+
+  // Miscellaneous
+
+  MOCK_METHOD(void, glBlendFunc, (GLenum sfactor, GLenum dfactor), (override));
+
+  // Texture mapping
+  MOCK_METHOD(void, glTexEnvf, (GLenum target, GLenum pname, GLfloat param),
+              (override));
+
+  MOCK_METHOD(void, glTexParameteri, (GLenum target, GLenum pname, GLint param),
+              (override));
+
+  MOCK_METHOD(void, glTexImage2D,
+              (GLenum target, GLint level, GLint internalFormat, GLsizei width,
+               GLsizei height, GLint border, GLenum format, GLenum type,
+               const GLvoid *pixels),
+              (override));
+
+  // 1.1 functions
+  MOCK_METHOD(void, glGenTextures, (GLsizei n, GLuint *textures), (override));
+  MOCK_METHOD(void, glBindTexture, (GLenum target, GLuint texture), (override));
+  MOCK_METHOD(void, glPushMatrix, (), (override));
+  MOCK_METHOD(void, glPopMatrix, (), (override));
+  MOCK_METHOD(void, glViewport,
+              (GLint x, GLint y, GLsizei width, GLsizei height), (override));
 
   // Virtual Buffer Object functions
   MOCK_METHOD(void, glGenBuffers, (GLsizei n, GLuint *buffers), (override));
@@ -83,6 +112,8 @@ public:
                GLuint *shaders),
               (override));
   MOCK_METHOD(void, glDeleteProgram, (GLuint program), (override));
+
+  MOCK_METHOD(void, glDisable, (GLenum cap), (override));
 };
 
 } // namespace sdl_opengl_cpp

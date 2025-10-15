@@ -20,8 +20,9 @@ using namespace sdl_opengl_cpp;
 using namespace sdl_opengl_cpp::sdl_opengl;
 
 SDLOpenGLTester::SDLOpenGLTester(const std::shared_ptr<SDL> &sdl,
-                                 const std::shared_ptr<GLContext> &ctx) {
-  sdl_opengl.emplace(sdl_opengl_cpp::SDLOpenGL(sdl, ctx));
+                                 const std::shared_ptr<GLContext> &ctx,
+                                 const ClippingPlanes &clipping_planes) {
+  sdl_opengl.emplace(sdl_opengl_cpp::SDLOpenGL(sdl, ctx, clipping_planes));
 }
 
 // #ifndef NO_EXCEPTIONS
@@ -46,7 +47,10 @@ SDLOpenGLTester::SDLOpenGLTester(const std::shared_ptr<SDL> &sdl,
 
 //   EXPECT_CALL(*mock_sdl_wrapper, Quit()).Times(1);
 
-//   SDLOpenGLTester sdl_opengl_tester(sdl, mock_opengl_context);
+//   ClippingPlanes clipping_planes(-1.0, 1.0, -1.0, 1.0, -10.0, 10.0);
+
+//   SDLOpenGLTester sdl_opengl_tester(sdl, mock_opengl_context,
+//   clipping_planes);
 
 //   CHECK(true);
 // }
@@ -73,7 +77,10 @@ SDLOpenGLTester::SDLOpenGLTester(const std::shared_ptr<SDL> &sdl,
 
 //   EXPECT_CALL(*mock_sdl_wrapper, Quit()).Times(1);
 
-//   SDLOpenGLTester sdl_opengl_tester(sdl, mock_opengl_context);
+//   ClippingPlanes clipping_planes(-1.0, 1.0, -1.0, 1.0, -10.0, 10.0);
+
+//   SDLOpenGLTester sdl_opengl_tester(sdl, mock_opengl_context,
+//   clipping_planes);
 
 //   CHECK(true);
 // }

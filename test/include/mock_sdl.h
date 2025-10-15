@@ -41,6 +41,41 @@ public:
 
   MOCK_METHOD(void, DestroyWindow, (SDL_Window * window), (override));
 
+  // Surface functions
+
+  MOCK_METHOD(int, SetSurfaceColorMod,
+              (SDL_Surface * surface, Uint8 r, Uint8 g, Uint8 b), (override));
+
+  MOCK_METHOD(int, GetSurfaceColorMod,
+              (SDL_Surface * surface, Uint8 *r, Uint8 *g, Uint8 *b),
+              (override));
+
+  MOCK_METHOD(int, SetSurfaceAlphaMod, (SDL_Surface * surface, Uint8 alpha),
+              (override));
+
+  MOCK_METHOD(int, GetSurfaceAlphaMod, (SDL_Surface * surface, Uint8 *alpha),
+              (override));
+
+  MOCK_METHOD(int, SetSurfaceBlendMode,
+              (SDL_Surface * surface, SDL_BlendMode blendMode), (override));
+
+  MOCK_METHOD(int, GetSurfaceBlendMode,
+              (SDL_Surface * surface, SDL_BlendMode *blendMode), (override));
+
+  MOCK_METHOD(SDL_Surface *, CreateRGBSurfaceWithFormat,
+              (Uint32 flags, int width, int height, int depth, Uint32 format),
+              (override));
+
+  MOCK_METHOD(void, FreeSurface, (SDL_Surface * surface), (override));
+
+  MOCK_METHOD(int, BlitSurface,
+              (SDL_Surface * src, const SDL_Rect *srcrect, SDL_Surface *dst,
+               SDL_Rect *dstrect),
+              (override));
+
+  MOCK_METHOD(int, SaveBMP,
+              (SDL_Surface * surface, const std::string &filename), (override));
+
 public:
   bool initialized = false;
 };

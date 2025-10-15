@@ -343,6 +343,155 @@ int SDL::GetCurrentDisplayMode(int displayIndex, SDL_DisplayMode *mode) {
   return sdl_wrapper->GetCurrentDisplayMode(displayIndex, mode);
 }
 
+// SDL_Surface functions
+
+int SDL::SetSurfaceColorMod(SDL_Surface *surface, const Uint8 r, const Uint8 g,
+                            const Uint8 b) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError("SDL Object is in an unspecified state");
+#else
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::UnspecifiedStateError));
+    return -1;
+#endif
+  }
+
+  return sdl_wrapper->SetSurfaceColorMod(surface, r, g, b);
+}
+
+int SDL::GetSurfaceColorMod(SDL_Surface *surface, Uint8 *r, Uint8 *g,
+                            Uint8 *b) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError("SDL Object is in an unspecified state");
+#else
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::UnspecifiedStateError));
+    return -1;
+#endif
+  }
+
+  return sdl_wrapper->GetSurfaceColorMod(surface, r, g, b);
+}
+
+int SDL::SetSurfaceAlphaMod(SDL_Surface *surface, const Uint8 alpha) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError("SDL Object is in an unspecified state");
+#else
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::UnspecifiedStateError));
+    return -1;
+#endif
+  }
+
+  return sdl_wrapper->SetSurfaceAlphaMod(surface, alpha);
+}
+
+int SDL::GetSurfaceAlphaMod(SDL_Surface *surface, Uint8 *alpha) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError("SDL Object is in an unspecified state");
+#else
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::UnspecifiedStateError));
+    return -1;
+#endif
+  }
+
+  return sdl_wrapper->GetSurfaceAlphaMod(surface, alpha);
+}
+
+int SDL::SetSurfaceBlendMode(SDL_Surface *surface,
+                             const SDL_BlendMode blendMode) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError("SDL Object is in an unspecified state");
+#else
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::UnspecifiedStateError));
+    return -1;
+#endif
+  }
+
+  return sdl_wrapper->SetSurfaceBlendMode(surface, blendMode);
+}
+
+int SDL::GetSurfaceBlendMode(SDL_Surface *surface, SDL_BlendMode *blendMode) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError("SDL Object is in an unspecified state");
+#else
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::UnspecifiedStateError));
+    return -1;
+#endif
+  }
+
+  return sdl_wrapper->GetSurfaceBlendMode(surface, blendMode);
+}
+
+SDL_Surface *SDL::CreateRGBSurfaceWithFormat(Uint32 flags, int width,
+                                             int height, int depth,
+                                             Uint32 format) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError("SDL Object is in an unspecified state");
+#else
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::UnspecifiedStateError));
+    return nullptr;
+#endif
+  }
+
+  return sdl_wrapper->CreateRGBSurfaceWithFormat(flags, width, height, depth,
+                                                 format);
+}
+
+void SDL::FreeSurface(SDL_Surface *surface) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError("SDL Object is in an unspecified state");
+#else
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::UnspecifiedStateError));
+    return;
+#endif
+  }
+
+  return sdl_wrapper->FreeSurface(surface);
+}
+
+int SDL::BlitSurface(SDL_Surface *src, const SDL_Rect *srcrect,
+                     SDL_Surface *dst, SDL_Rect *dstrect) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError("SDL Object is in an unspecified state");
+#else
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::UnspecifiedStateError));
+    return -1;
+#endif
+  }
+
+  return sdl_wrapper->BlitSurface(src, srcrect, dst, dstrect);
+}
+
+int SDL::SaveBMP(SDL_Surface *surface, const std::string &filename) {
+  if (is_in_unspecified_state()) {
+#ifndef NO_EXCEPTIONS
+    throw sdl::UnspecifiedStateError("SDL Object is in an unspecified state");
+#else
+    set_error(
+        std::optional<error>(sdl_opengl_cpp::error::UnspecifiedStateError));
+    return -1;
+#endif
+  }
+
+  return sdl_wrapper->SaveBMP(surface, filename);
+}
+
 void SDL::cleanup() noexcept {
   if (initialized) {
     sdl_wrapper->Quit();

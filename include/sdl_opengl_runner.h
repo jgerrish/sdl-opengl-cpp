@@ -27,6 +27,7 @@
 #ifndef _SDL_OPENGL_H_
 #define _SDL_OPENGL_H_
 
+#include <functional>
 #include <memory>
 #include <optional>
 
@@ -42,6 +43,7 @@
 #include "spdlog/spdlog.h"
 #endif
 
+#include "clipping_planes.h"
 #include "sdl_base.h"
 #include "sdl_window.h"
 
@@ -78,10 +80,21 @@ class SDLOpenGL : private MoveChecker {
 class SDLOpenGL : public Errors {
 #endif
 public:
-  SDLOpenGL(const std::shared_ptr<SDL> &sdl_);
+  SDLOpenGL(const std::shared_ptr<SDL> &sdl_,
+            const ClippingPlanes &clipping_planes_);
 
   SDLOpenGL(const std::shared_ptr<SDL> &sdl_,
-            const std::shared_ptr<GLContext> &ctx);
+            const std::shared_ptr<GLContext> &ctx,
+            const ClippingPlanes &clipping_planes_);
+
+  SDLOpenGL(const std::shared_ptr<SDL> &sdl,
+            std::unique_ptr<sdl_opengl_cpp::sdl_window::SDLWindow> &window,
+            const std::function<void(
+                std::shared_ptr<GLContext> &context, std::shared_ptr<SDL> &s,
+                std::unique_ptr<sdl_opengl_cpp::sdl_window::SDLWindow> &window)>
+                &func,
+            const ClippingPlanes &clipping_planes_);
+  ;
 
   ~SDLOpenGL();
 
@@ -123,6 +136,13 @@ public:
   //! \returns 0 on success, -1 on failure
   int rungl();
 
+  //! Helper function for the SDLWindow constructor
+  int rungl_with_window(
+      const std::function<void(
+          std::shared_ptr<GLContext> &gl_context, std::shared_ptr<SDL> &sdl,
+          std::unique_ptr<sdl_opengl_cpp::sdl_window::SDLWindow> &window)>
+          &runner);
+
   //! Make this GL context the current one and set the viewport
   //!
   //! \returns 0 on success
@@ -135,6 +155,14 @@ public:
 
   //! Log the swap interval
   void LogSwapInterval();
+
+  //! Set the rendering settings for OpenGL
+  //!
+  //! This sets things like the clipping planes and perspective
+  //!
+  //! In particular it calls glOrtho and sets the depth function and
+  //! shade model.
+  int set_rendering_settings();
 
   //! Determine if the class instance is in an unspecified state after
   //! a move.
@@ -156,7 +184,7 @@ public:
 
 private:
   //! Access to the SDL functions
-  const std::shared_ptr<SDL> sdl = nullptr;
+  std::shared_ptr<SDL> sdl = nullptr;
 
   //! This is the structure that the SDL_PROC macro assigns functions
   //! to.  Each function is a field of gl_context.
@@ -179,6 +207,9 @@ private:
   //! window is the main SDL_Window for this application
   //! Currently we only support one window per application
   std::unique_ptr<sdl_opengl_cpp::sdl_window::SDLWindow> window = nullptr;
+
+  //! The clipping planes to use for glOrtho
+  ClippingPlanes clipping_planes;
 };
 
 } // namespace sdl_opengl_cpp

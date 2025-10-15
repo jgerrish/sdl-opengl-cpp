@@ -4,6 +4,7 @@
 #include <memory>
 #include <optional>
 
+#include "clipping_planes.h"
 #include "mock_opengl.h"
 #include "sdl_base.h"
 #include "sdl_opengl_runner.h"
@@ -13,7 +14,8 @@ namespace sdl_opengl_cpp {
 class SDLOpenGLTester {
 public:
   SDLOpenGLTester(const std::shared_ptr<SDL> &sdl,
-                  const std::shared_ptr<GLContext> &ctx);
+                  const std::shared_ptr<GLContext> &ctx,
+                  const ClippingPlanes &clipping_planes);
 
   // Explicitly delete the generated default copy constructor
   SDLOpenGLTester(const SDLOpenGLTester &) = delete;

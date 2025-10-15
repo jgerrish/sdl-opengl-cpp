@@ -106,3 +106,53 @@ void SDLWrapper::GL_SwapWindow(SDL_Window *window) {
 }
 
 Uint32 SDLWrapper::GetTicks(void) { return SDL_GetTicks(); }
+
+// Surface functions
+
+int SDLWrapper::SetSurfaceColorMod(SDL_Surface *surface, Uint8 r, Uint8 g,
+                                   Uint8 b) {
+  return SDL_SetSurfaceColorMod(surface, r, g, b);
+}
+
+int SDLWrapper::GetSurfaceColorMod(SDL_Surface *surface, Uint8 *r, Uint8 *g,
+                                   Uint8 *b) {
+  return SDL_GetSurfaceColorMod(surface, r, g, b);
+}
+
+int SDLWrapper::SetSurfaceAlphaMod(SDL_Surface *surface, Uint8 alpha) {
+  return SDL_SetSurfaceAlphaMod(surface, alpha);
+}
+
+int SDLWrapper::GetSurfaceAlphaMod(SDL_Surface *surface, Uint8 *alpha) {
+  return SDL_GetSurfaceAlphaMod(surface, alpha);
+}
+
+int SDLWrapper::SetSurfaceBlendMode(SDL_Surface *surface,
+                                    SDL_BlendMode blendMode) {
+  return SDL_SetSurfaceBlendMode(surface, blendMode);
+}
+
+int SDLWrapper::GetSurfaceBlendMode(SDL_Surface *surface,
+                                    SDL_BlendMode *blendMode) {
+  return SDL_GetSurfaceBlendMode(surface, blendMode);
+}
+
+SDL_Surface *SDLWrapper::CreateRGBSurfaceWithFormat(Uint32 flags, int width,
+                                                    int height, int depth,
+                                                    Uint32 format) {
+
+  return SDL_CreateRGBSurfaceWithFormat(flags, width, height, depth, format);
+}
+
+void SDLWrapper::FreeSurface(SDL_Surface *surface) {
+  return SDL_FreeSurface(surface);
+}
+
+int SDLWrapper::BlitSurface(SDL_Surface *src, const SDL_Rect *srcrect,
+                            SDL_Surface *dst, SDL_Rect *dstrect) {
+  return SDL_BlitSurface(src, srcrect, dst, dstrect);
+}
+
+int SDLWrapper::SaveBMP(SDL_Surface *surface, const std::string &filename) {
+  return SDL_SaveBMP(surface, filename.c_str());
+}
