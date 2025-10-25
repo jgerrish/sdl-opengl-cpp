@@ -2,7 +2,9 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include <spdlog/spdlog.h>
+#ifndef NO_EXCEPTIONS
+#include "spdlog/spdlog.h"
+#endif
 
 #include "gl_context.h"
 #include "mock_opengl.h"

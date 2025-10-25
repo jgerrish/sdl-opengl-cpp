@@ -1,7 +1,9 @@
 #include <cmath>
 
+#ifndef NO_EXCEPTIONS
 #include "spdlog/fmt/ostr.h" // support for user defined types
 #include "spdlog/spdlog.h"
+#endif
 
 #include "vertex_buffer_object.h"
 
