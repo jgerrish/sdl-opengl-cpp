@@ -1,4 +1,6 @@
+#ifndef NO_EXCEPTIONS
 #include "spdlog/spdlog.h"
+#endif
 
 #include "program.h"
 #include "shader.h"
@@ -210,8 +212,8 @@ GLint Program::getUniformLocation(const std::string &uniform_name_to_get) {
   GLint location =
       gl_context->glGetUniformLocation(program, uniform_name_to_get.c_str());
   if (location == -1) {
-    spdlog::error("Couldn't get location {} of uniform");
 #ifndef NO_EXCEPTIONS
+    spdlog::error("Couldn't get location {} of uniform");
     throw GetUniformLocationError("Couldn't get location of uniform");
 #else
     set_error(std::optional<error>(error::GetUniformLocationError));

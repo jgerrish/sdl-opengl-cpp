@@ -1,4 +1,6 @@
+#ifndef NO_EXCEPTIONS
 #include "spdlog/spdlog.h"
+#endif
 
 #include "shader.h"
 

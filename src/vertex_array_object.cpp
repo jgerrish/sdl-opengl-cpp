@@ -1,6 +1,8 @@
 #include <cmath>
 
+#ifndef NO_EXCEPTIONS
 #include "spdlog/spdlog.h"
+#endif
 
 #include "vertex_array_object.h"
 
