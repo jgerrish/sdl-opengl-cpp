@@ -1,0 +1,14 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+find_dependency(SDL2)
+find_dependency(spdlog)
+
+include("${CMAKE_CURRENT_LIST_DIR}/sdl-opengl-cpp-targets.cmake")
+
+# set_and_check(SDL_OPENGL_CPP_INCLUDE_DIR "@PACKAGE_INCLUDE_INSTALL_DIR@")
+# message("SDL_OPENGL_CPP_INCLUDE_DIR: ${SDL_OPENGL_CPP_INCLUDE_DIR}")
+# If we had any configuration files in etc
+# set_and_check(SDL_OPENGL_CPP_SYSCONFIG_DIR "@PACKAGE_SYSCONFIG_INSTALL_DIR@")
+
+check_required_components("sdl-opengl-cpp")

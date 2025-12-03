@@ -1,0 +1,73 @@
+# This is the actual CMake project script for the install integration
+# test.
+#
+# Unlike the main project and build integration test, this is required
+# because we test both find_package and ExternalProject.
+# ExternalProject won't make the *.cmake files available until a
+# target is explicitly built.
+
+cmake_minimum_required(VERSION 3.24)
+
+project(sdl-opengl-cpp-install-integration-test VERSION 0.1.0)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Follow the current Google C++ Style Guides and target C++ 20
+# They are aggressive in their adoption of C++ versions
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+add_executable(
+  ${PROJECT_NAME}
+  src/${PROJECT_NAME}.cpp
+)
+
+find_package(OpenGL REQUIRED)
+# target_link_libraries(${PROJECT_NAME} PUBLIC OpenGL::GL)
+
+# find_package(fmt REQUIRED)
+
+find_package(SDL2 CONFIG REQUIRED COMPONENTS SDL2)
+find_package(SDL2 CONFIG REQUIRED SDL2main)
+
+if (SDL2_FOUND)
+ 	message("Using SDL2 from find_package")
+ 	target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
+ 	target_link_libraries(${PROJECT_NAME} PUBLIC ${SDL2_LIBRARIES})
+ 	set(CMAKE_REQUIRED_INCLUDES ${SDL2_INCLUDE_DIRS})
+ 	unset(CHECK_SDL_VERSION CACHE)
+else()
+ 	# Fall back on pkg-config
+ 	include(FindPkgConfig)
+ 	pkg_search_modules(SDL2 REQUIRED sdl2)
+ 	message("Using SDL2 from pkg-config")
+	target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
+ 	target_link_libraries(${PROJECT_NAME} PUBLIC ${SDL2_LIBRARIES})
+ 	set(CMAKE_REQUIRED_INCLUDES ${SDL2_INCLUDE_DIRS})
+ 	unset(CHECK_SDL_VERSION CACHE)
+endif()
+
+find_package(spdlog REQUIRED)
+
+if(spdlog_FOUND)
+  target_link_libraries(${PROJECT_NAME} PUBLIC spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
+endif()
+
+
+# First, we use ExternalProject to build and install sdl-opengl-cpp
+# into the build tree of this integration test.
+#
+# We don't want to build the sdl-opengl-cpp tests.
+#
+# That's part of the reason we're using ExternalProject instead of
+# FetchContent.  We have a little more control with it.
+#
+# This first commit doesn't disable test building in the entire
+# project.  I need to make sure that all the CI scripts properly run
+# the tests.  And it's also a social design decision with project
+# management.  Running tests by default may be a better choice for
+# future new project contributors.
+set(installDir ${CMAKE_CURRENT_BINARY_DIR}/install)
+
+include(ExternalProject)
+
