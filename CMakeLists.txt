@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.13)
 # structures and functions.
 # Right now, that includes programs, shaders, Vertex Array Objects and
 # Vertex Buffer Objects.
-project(sdl-opengl-cpp VERSION 0.3.0)
+project(sdl-opengl-cpp VERSION 0.3.1)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -206,3 +206,103 @@ endif()
 
 
 add_subdirectory(test)
+
+set(CMAKE_INSTALL_INCLUDEDIR "include")
+
+target_include_directories(
+  ${PROJECT_NAME}
+  PUBLIC
+  $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+set(PUBLIC_HEADERS
+  "include/error.h"
+  "include/errors.h"
+  "include/gl_context.h"
+  "include/move_checker.h"
+  "include/opengl.h"
+  "include/program.h"
+  "include/sdl_base.h"
+  "include/SDL_glfuncs.h"
+  "include/sdl_opengl_runner.h"
+  "include/sdl_window.h"
+  "include/sdl_wrapper.h"
+  "include/shader.h"
+  "include/vertex_array_object.h"
+  "include/vertex_buffer_object.h"
+)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADERS}")
+
+include(GNUInstallDirs)
+
+# TODO: Fix double includes
+#
+# It looks like the include directory might get included twice by
+# users of this CMake configuration.
+#
+# I don't know if it's using PUBLIC_HEADER and INCLUDES both or what.
+# There are different best practices I've seen on which one to use.
+install(TARGETS ${PROJECT_NAME}
+  EXPORT "sdl-opengl-cpp-targets"
+  RUNTIME
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  PUBLIC_HEADER
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+  INCLUDES
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+)
+
+# Try another install option from
+# guide/importing-exporting/index.html
+install(EXPORT "sdl-opengl-cpp-targets"
+        FILE "sdl-opengl-cpp-targets.cmake"
+        NAMESPACE sdl-opengl-cpp::
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/sdl-opengl-cpp"
+)
+
+# Make them usable from the build tree too
+# TODO: Add integration tests for this
+export(EXPORT "sdl-opengl-cpp-targets"
+       FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/sdl-opengl-cpp-targets.cmake"
+       NAMESPACE sdl-opengl-cpp::
+)
+
+# This shouldn't be required, adding a library alias that is
+# namespaced.  But it's done in this example:
+# guide/importing-exporting/index.html
+# And here: manual/cmake-buildsystem.7.html#id41
+# And it appears to fix the import issue in the integration tests
+add_library(
+  "${PROJECT_NAME}::${PROJECT_NAME}"
+  ALIAS ${PROJECT_NAME}
+)
+
+message("CMAKE_INSTALL_INCLUDEDIR: ${CMAKE_INSTALL_INCLUDEDIR}")
+set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR}/sdl-opengl-cpp
+    CACHE PATH "Location of header files" )
+
+# We don't have any config files, so this is commented out for now.
+# set(SYSCONFIG_INSTALL_DIR ${CMAKE_INSTALL_SYSCONFDIR}/sdl-opengl-cpp
+#     CACHE PATH "Location of configuration files" )
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(scripts/sdl-opengl-cpp-config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/cmake/sdl-opengl-cpp-config.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/lib/cmake/sdl-opengl-cpp
+  PATH_VARS INCLUDE_INSTALL_DIR) # SYSCONFIG_INSTALL_DIR)
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/cmake/sdl-opengl-cpp-config-version.cmake
+  VERSION ${${PROJECT_NAME}_VERSION}
+  COMPATIBILITY SameMajorVersion )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/cmake/sdl-opengl-cpp-config.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/cmake/sdl-opengl-cpp-config-version.cmake
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sdl-opengl-cpp )
+

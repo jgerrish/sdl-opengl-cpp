@@ -34,6 +34,10 @@ You also need the basic C++ toolchain.  It's the build-essential
 package on Debian systems, Fedora and SUSE both have meta-packages or
 groups that you can install to get C++ development.
 
+The examples below use the Ninja build system:
+
+apt install ninja-build
+
 ## Compiling ##
 
 $ mkdir build
@@ -115,3 +119,48 @@ To run the tests, just execute the following after compiling:
 
 $ test/sdl-opengl-cpp-test
 
+## Integration Tests ##
+
+There are now a set of separate integration tests that test
+integrating sdl-opengl-cpp into another project.  There are currently
+two separate tests.
+
+One tests compiling from a build-tree download (using CMake's
+ExternalProject_Add).
+
+The other tests compiling using the installed
+sdl-opengl-cpp-config.cmake files.
+
+These tests can be built separately without building the main project
+first.  They setup their own build directories and try to simulate as
+much as possible the process of another project using sdl-opengl-cpp.
+
+### Build-tree Integration Test ##
+
+To build and run the build-tree integration test:
+
+$ cd test/integration/build-tree-integration-test
+$ mkdir -p build
+$ cd build
+$ cmake -DCMAKE\_BUILD\_TYPE=Debug -G Ninja ..
+$ ninja
+$ ./sdl-opengl-cpp-build-tree-integration-test
+
+The process return code should be 0.  To test under bash:
+
+$ echo $?
+
+### Install Integration Test ##
+
+To build and run the install integration test:
+
+$ cd test/integration/install-integration-test
+$ mkdir -p build
+$ cd build
+$ cmake e -DCMAKE\_BUILD\_TYPE=Debug -G Ninja ..
+$ ninja
+$ ./install/bin/sdl-opengl-cpp-install-integration-test
+
+The process return code should be 0.  To test under bash:
+
+$ echo $?
