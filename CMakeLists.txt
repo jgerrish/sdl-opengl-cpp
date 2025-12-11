@@ -219,6 +219,7 @@ target_include_directories(
 )
 
 set(PUBLIC_HEADERS
+  "include/clipping_planes.h"
   "include/error.h"
   "include/errors.h"
   "include/gl_context.h"
@@ -228,6 +229,7 @@ set(PUBLIC_HEADERS
   "include/sdl_base.h"
   "include/SDL_glfuncs.h"
   "include/sdl_opengl_runner.h"
+  "include/sdl_surface_base.h"
   "include/sdl_window.h"
   "include/sdl_wrapper.h"
   "include/shader.h"
