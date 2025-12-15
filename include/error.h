@@ -42,8 +42,22 @@ enum class error {
 
   // SDL Surface errors
   SDLSurfaceCreationError,
-  SDLSurfaceLoadTextureError
+  SDLSurfaceLoadTextureError,
 
+  // These are errors that belong to other modules, such as SDL TTF.
+  //
+  // We should probably have a hierarchical class-based error system for
+  // those who disable exceptions.
+  // Then I can move these into their relevant modules.  This design
+  // breaks encapsulation.  But it is simple.
+  //
+  // For now, KISS
+  //
+  // If you have a favorite design that makes life easier, let me
+  // know.
+
+  // General SDL TTF errors
+  SDLTTFInitFailedError
 };
 
 extern std::ostream &operator<<(std::ostream &os, const error &e);
