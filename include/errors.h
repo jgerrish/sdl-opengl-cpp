@@ -10,7 +10,7 @@
 #include "error.h"
 #include "move_checker.h"
 
-using namespace sdl_opengl_cpp;
+namespace sdl_opengl_cpp {
 
 class Errors : public MoveChecker {
 public:
@@ -96,6 +96,8 @@ protected:
   std::optional<std::function<void(const error &error)>> error_handler =
       std::nullopt;
 };
+
+} // namespace sdl_opengl_cpp
 
 #endif
 
