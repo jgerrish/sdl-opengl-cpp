@@ -131,21 +131,19 @@ add_library(
 add_subdirectory(src)
 
 find_package(SDL2 CONFIG REQUIRED COMPONENTS SDL2)
-find_package(SDL2 CONFIG REQUIRED SDL2main)
 
 if (SDL2_FOUND)
 	message("Using SDL2 from find_package")
-	target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
-	target_link_libraries(${PROJECT_NAME} PUBLIC ${SDL2_LIBRARIES})
-	set(CMAKE_REQUIRED_INCLUDES ${SDL2_INCLUDE_DIRS})
-	unset(CHECK_SDL_VERSION CACHE)
-
+	target_link_libraries(${PROJECT_NAME}
+          PRIVATE
+          $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+          $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+	)
 else()
 	# Fall back on pkg-config
 	include(FindPkgConfig)
 	pkg_search_modules(SDL2 REQUIRED sdl2)
 	message("Using SDL2 from pkg-config")
-	target_include_directories(${PROJECT_NAME} PUBLIC ${SDL2_INCLUDE_DIRS})
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${SDL2_LIBRARIES})
 	set(CMAKE_REQUIRED_INCLUDES ${SDL2_INCLUDE_DIRS})
 	unset(CHECK_SDL_VERSION CACHE)
@@ -249,7 +247,7 @@ include(GNUInstallDirs)
 # I don't know if it's using PUBLIC_HEADER and INCLUDES both or what.
 # There are different best practices I've seen on which one to use.
 install(TARGETS ${PROJECT_NAME}
-  EXPORT "sdl-opengl-cpp-targets"
+  EXPORT "${PROJECT_NAME}-targets"
   RUNTIME
     DESTINATION ${CMAKE_INSTALL_BINDIR}
   LIBRARY
@@ -264,10 +262,14 @@ install(TARGETS ${PROJECT_NAME}
 
 # Try another install option from
 # guide/importing-exporting/index.html
-install(EXPORT "sdl-opengl-cpp-targets"
-        FILE "sdl-opengl-cpp-targets.cmake"
+export(TARGETS ${PROJECT_NAME}
+       NAMESPACE sdl-opengl-cpp::
+       FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-targets.cmake"
+)
+install(EXPORT "${PROJECT_NAME}-targets"
+        FILE "${PROJECT_NAME}-targets.cmake"
         NAMESPACE sdl-opengl-cpp::
-        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/sdl-opengl-cpp"
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
 # Make them usable from the build tree too

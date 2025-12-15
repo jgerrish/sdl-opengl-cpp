@@ -1,6 +1,10 @@
 #ifndef _SDL_OPENGL_CPP_CLIPPING_PLANES_H_
 #define _SDL_OPENGL_CPP_CLIPPING_PLANES_H_
 
+// Microsoft has near and far macros
+#undef near
+#undef far
+
 namespace sdl_opengl_cpp {
 
 //! Data structure to define a vertical, horizontal and depth clipping
