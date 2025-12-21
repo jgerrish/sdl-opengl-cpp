@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.24)
 
 # This is a C++ library of simple RAII classes to manage OpenGL
 # structures and functions.
 # Right now, that includes programs, shaders, Vertex Array Objects and
 # Vertex Buffer Objects.
-project(sdl-opengl-cpp VERSION 0.3.1)
+project(sdl-opengl-cpp VERSION 0.3.2)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -236,6 +236,9 @@ set(PUBLIC_HEADERS
 
   # These are "development" headers that can be used by external tests
   # and other non-user facing components
+  #
+  # These files get placed in the same include directory as the other
+  # public include files
   "test/include/mock_sdl.h"
 )
 
