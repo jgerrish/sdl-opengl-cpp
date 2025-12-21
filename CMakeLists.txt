@@ -233,6 +233,10 @@ set(PUBLIC_HEADERS
   "include/shader.h"
   "include/vertex_array_object.h"
   "include/vertex_buffer_object.h"
+
+  # These are "development" headers that can be used by external tests
+  # and other non-user facing components
+  "test/include/mock_sdl.h"
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADERS}")

@@ -57,7 +57,10 @@ enum class error {
   // know.
 
   // General SDL TTF errors
-  SDLTTFInitFailedError
+  SDLTTFInitFailedError,
+
+  // An error opening a font
+  SDLTTFFontOpenError,
 };
 
 extern std::ostream &operator<<(std::ostream &os, const error &e);
